@@ -3,9 +3,13 @@ package infostaff.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
+import infostaff.common.CommonFunc;
+import infostaff.common.CommonParam;
 import infostaff.entity.TblRoleEntity;
 import infostaff.mapping.RoleMapping;
 import infostaff.model.ResponseModel;
@@ -45,72 +49,52 @@ public class RoleServiceImpl implements IRoleService {
 	}
 
 	@Override
-	public ResponseModel insertRole(RoleModel model) {
+	public ResponseModel insertRole(RoleModel model, User loginedUser) {
 
 		RoleMapping roleMapping = new RoleMapping();
 		TblRoleEntity entity = roleMapping.modelToEntity(model);
-
+		String code = StringUtils.EMPTY;
+		log.info("Login user: " + loginedUser.getUsername());
+		
 		if (entity != null) {
 
 			try {
-				TblRoleEntity result = roleRepo.save(entity);
 				
-				if(result != null) 
-					return createResponseModelByCode("00");
-				else
-					return createResponseModelByCode("10");
+				TblRoleEntity result = roleRepo.save(entity);
+				code = (result != null)? CommonParam.CODE_SUCCESS : CommonParam.CODE_FAILED;
 				
 			} catch (Exception ex) {
+				code = CommonParam.CODE_FAILED;
 				log.error("Insert Role error: " + ex.toString());
-				return createResponseModelByCode("10");
 			}
 		}else {
-			return createResponseModelByCode("13");
+			code = CommonParam.CODE_CONVERT_ERROR;
 		}
-	}
-
-	private ResponseModel createResponseModelByCode(String code) {
-
-		switch (code) {
-		case "00":
-			return new ResponseModel(code, "Execute successed");
-		case "10":
-			return new ResponseModel(code, "Execute database failed");
-		case "11":
-			return new ResponseModel(code, "Duplicated data");
-		case "12":
-			return new ResponseModel(code, "No data found");
-		case "13":
-			return new ResponseModel(code, "Convert data error");
-		case "14":
-			return new ResponseModel(code, "Validation error");
-		default:
-			return new ResponseModel();
-		}
+		
+		return CommonFunc.createResponseModelByCode(code);
 	}
 
 	@Override
-	public ResponseModel updateRole(RoleModel model) {
+	public ResponseModel updateRole(RoleModel model, User loginedUser) {
 		RoleMapping roleMapping = new RoleMapping();
 		TblRoleEntity entity = roleMapping.modelToEntity(model);
-
+		String code = StringUtils.EMPTY;
+		
 		if (entity != null) {
 
 			try {
-				TblRoleEntity result = roleRepo.save(entity);
 				
-				if(result != null) 
-					return createResponseModelByCode("00");
-				else
-					return createResponseModelByCode("10");
+				TblRoleEntity result = roleRepo.save(entity);
+				code = (result != null)? CommonParam.CODE_SUCCESS : CommonParam.CODE_FAILED;
 				
 			} catch (Exception ex) {
+				code = CommonParam.CODE_FAILED;
 				log.error("Update Role error: " + ex.toString());
-				return createResponseModelByCode("10");
 			}
 		}else {
-			return createResponseModelByCode("13");
+			code = CommonParam.CODE_CONVERT_ERROR;
 		}
+		return CommonFunc.createResponseModelByCode(code);
 	}
 
 }
