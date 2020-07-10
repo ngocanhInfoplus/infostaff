@@ -10,5 +10,6 @@ public interface IStaffTimeCardService {
 
     ResponseModel insert(StaffTimeCardModel model, User user);
     ResponseModel update(StaffTimeCardModel model, User user);
+    ResponseModel checkOut(StaffTimeCardModel model, User user);
     List<StaffTimeCardModel> getAll();
 }

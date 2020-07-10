@@ -20,20 +20,20 @@ import static infostaff.common.CommonParam.CODE_VALIDATION_ERROR;
 
 @Controller
 @RestController
-public class CheckOutController {
+public class ChangeTimeCardController {
     @Autowired
     IStaffTimeCardService service;
 
-    @PostMapping(value = "/api/v1.0/infostaff/check-out",consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseModel CheckOut(@RequestBody StaffTimeCardModel model, Principal principal) {
+    @PostMapping(value = "/api/v1.0/infostaff/change-timecard",consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseModel ChangeTimeCard(@RequestBody StaffTimeCardModel model, Principal principal) {
 
         User user = (User) ((Authentication) principal).getPrincipal();
-        if(!cOValid(model))
+        if(!cTCValid(model))
             return CommonFunc.createResponseModelByCode(CODE_VALIDATION_ERROR);
-        return service.checkOut(model, user);
+        return service.update(model, user);
     }
 
-    private boolean cOValid(StaffTimeCardModel model) {
+    private boolean cTCValid(StaffTimeCardModel model) {
         if(StringUtils.isNotBlank(model.getStaffId().toString()) || StringUtils.isNotBlank(model.getCheckOut()) || StringUtils.isNotBlank(model.getWorkingDate().toString()))
             return false;
         return true;
