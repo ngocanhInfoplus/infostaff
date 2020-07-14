@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -77,37 +78,43 @@ public class StaffTimeCardServiceImpl implements IStaffTimeCardService{
     }
 
     @Override
-    @Transactional
-    @Modifying
     public ResponseModel checkOut(StaffTimeCardModel model, User user) {
         StaffTimeCardMapping mapping = new StaffTimeCardMapping();
-        TblStaffTimeCardEntity entity = mapping.modelToEntity(model);
         String code = StringUtils.EMPTY;
         log.info("Login user: " + user.getUsername());
-        if(entity != null){
-            try {
+        try {
 
-                String sqlString = "UPDATE tblstafftimecard a SET a.checkOut = :checkOut WHERE a.id = :id AND a.staffId = :staffId"
-                        + " AND a.workingDate = :workingDate";
-                em.createNativeQuery(sqlString).setParameter("check_out", entity.getCheckOut())
-                        .setParameter("id", entity.getId())
-                        .setParameter("staffId", entity.getStaffId())
-                        .setParameter("workingDate", entity.getWorkingDate()).executeUpdate();
-                code = CommonParam.CODE_SUCCESS;
+            repo.updateTimeCard(model.getId(), model.getCheckOut(), model.getStaffId(),  model.getWorkingDate());
+            code = CommonParam.CODE_SUCCESS;
 
-            } catch (Exception ex) {
-                code = CommonParam.CODE_FAILED;
-                log.error("Update StaffTimeCard error: " + ex.toString());
-            }
+        } catch (Exception ex) {
+            code = CommonParam.CODE_FAILED;
+            log.error("Update StaffTimeCard error: " + ex.toString());
         }
-        else {
-            code = CommonParam.CODE_CONVERT_ERROR;
-        }
+
         return CommonFunc.createResponseModelByCode(code);
     }
 
     @Override
     public List<StaffTimeCardModel> getAll() {
-        return null;
+        List<StaffTimeCardModel> models = null;
+        List<TblStaffTimeCardEntity> entities = repo.findAll();
+
+        if (!entities.isEmpty()) {
+
+            models = new ArrayList<StaffTimeCardModel>();
+            StaffTimeCardModel model = new StaffTimeCardModel();
+            StaffTimeCardMapping roleMapping = new StaffTimeCardMapping();
+
+            for (TblStaffTimeCardEntity entity : entities) {
+
+                model = roleMapping.entityToModel(entity);
+
+                if (model != null)
+                    models.add(model);
+            }
+        }
+
+        return models;
     }
 }
