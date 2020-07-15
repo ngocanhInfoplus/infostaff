@@ -1,120 +1,176 @@
 package infostaff.service;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.stereotype.Service;
+
 import infostaff.common.CommonFunc;
 import infostaff.common.CommonParam;
+import infostaff.entity.TblStaffEntity;
 import infostaff.entity.TblStaffTimeCardEntity;
+import infostaff.exception.ResourceNotFoundException;
 import infostaff.mapping.StaffTimeCardMapping;
 import infostaff.model.ResponseModel;
 import infostaff.model.StaffTimeCardModel;
+import infostaff.repository.TblStaffRepository;
 import infostaff.repository.TblStaffTimeCardRepository;
+import infostaff.validation.StaffTimeCardValidation;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.util.ArrayList;
-import java.util.List;
 
 @Slf4j
 @Service
-public class StaffTimeCardServiceImpl implements IStaffTimeCardService{
+public class StaffTimeCardServiceImpl implements IStaffTimeCardService {
 
-    @Autowired
-    TblStaffTimeCardRepository repo;
+	@Autowired
+	TblStaffTimeCardRepository repo;
 
-    @PersistenceContext
-    private EntityManager em;
+	@Autowired
+	TblStaffRepository staffRepo;
 
-    @Override
-    public ResponseModel insert(StaffTimeCardModel model, User user) {
+	@Override
+	public ResponseEntity<StaffTimeCardModel> checkIn(StaffTimeCardModel model, User user)
+			throws ResourceNotFoundException {
 
-        StaffTimeCardMapping mapping = new StaffTimeCardMapping();
-        TblStaffTimeCardEntity entity = mapping.modelToEntity(model);
-        String code = StringUtils.EMPTY;
-        log.info("Login user: " + user.getUsername());
-        if(entity != null){
-            try {
+		if (model != null) {
 
-                TblStaffTimeCardEntity result = repo.save(entity);
-                code = (result != null)? CommonParam.CODE_SUCCESS : CommonParam.CODE_FAILED;
+			StaffTimeCardValidation validation = new StaffTimeCardValidation();
+			StaffTimeCardMapping mapping = new StaffTimeCardMapping();
 
-            } catch (Exception ex) {
-                code = CommonParam.CODE_FAILED;
-                log.error("Insert StaffTimeCard error: " + ex.toString());
-            }
-        }
-        else {
-            code = CommonParam.CODE_CONVERT_ERROR;
-        }
-        return CommonFunc.createResponseModelByCode(code);
-    }
+			if (validation.cIValid(model)) {
 
-    @Override
-    public ResponseModel update(StaffTimeCardModel model, User user) {
-        StaffTimeCardMapping mapping = new StaffTimeCardMapping();
-        TblStaffTimeCardEntity entity = mapping.modelToEntity(model);
-        String code = StringUtils.EMPTY;
-        log.info("Login user: " + user.getUsername());
-        if(entity != null){
-            try {
+				TblStaffTimeCardEntity entity = mapping.modelToEntity(model);
 
-                TblStaffTimeCardEntity result = repo.save(entity);
-                code = (result != null)? CommonParam.CODE_SUCCESS : CommonParam.CODE_FAILED;
+				if (entity != null) {
 
-            } catch (Exception ex) {
-                code = CommonParam.CODE_FAILED;
-                log.error("Update StaffTimeCard error: " + ex.toString());
-            }
-        }
-        else {
-            code = CommonParam.CODE_CONVERT_ERROR;
-        }
-        return CommonFunc.createResponseModelByCode(code);
-    }
+					// setup check in case
+					entity.setCheckIn(CommonFunc.dateToString(new Date(), "hh:mm:ss"));
+					entity.setChecked(true);
+					entity.setWorkingDate(new Date());
+					entity.setCreatedUser(user.getUsername());
+					entity.setCreatedDate(new Date());
+					entity.setRecordStatus(CommonParam.RC_OPEN);
 
-    @Override
-    public ResponseModel checkOut(StaffTimeCardModel model, User user) {
-        StaffTimeCardMapping mapping = new StaffTimeCardMapping();
-        String code = StringUtils.EMPTY;
-        log.info("Login user: " + user.getUsername());
-        try {
+					final StaffTimeCardModel insertedModel = mapping.entityToModel(repo.save(entity));
+					return ResponseEntity.ok(insertedModel);
 
-            repo.updateTimeCard(model.getId(), model.getCheckOut(), model.getStaffId(),  model.getWorkingDate());
-            code = CommonParam.CODE_SUCCESS;
+				} else {
+					throw new ResourceNotFoundException("Parsing error");
+				}
+			} else {
+				throw new ResourceNotFoundException("Validation error");
+			}
+		} else {
+			throw new ResourceNotFoundException("Staff information is empty ");
+		}
+	}
+	
+	@Override
+	public ResponseEntity<StaffTimeCardModel> checkOut(Long id, StaffTimeCardModel model, User user)
+			throws ResourceNotFoundException {
+		
+		if (id != null) {
 
-        } catch (Exception ex) {
-            code = CommonParam.CODE_FAILED;
-            log.error("Update StaffTimeCard error: " + ex.toString());
-        }
+			StaffTimeCardMapping mapping = new StaffTimeCardMapping();
 
-        return CommonFunc.createResponseModelByCode(code);
-    }
+			TblStaffTimeCardEntity entity = repo.findById(id)
+					.orElseThrow(() -> new ResourceNotFoundException("StaffTimeCard not found for this id :: " + id));
+			
+			// setup check out case
+			entity.setCheckOut(CommonFunc.dateToString(new Date(), "hh:mm:ss"));
+			
+			final StaffTimeCardModel updatededModel = mapping.entityToModel(repo.save(entity));
+			return ResponseEntity.ok(updatededModel);
+			
+		} else {
+			throw new ResourceNotFoundException("Staff information is empty ");
+		}
+	}
+	
+	@Override
+	public ResponseEntity<StaffTimeCardModel> update(Long id, StaffTimeCardModel model, User user) 
+			throws ResourceNotFoundException {
+		if (id != null) {
 
-    @Override
-    public List<StaffTimeCardModel> getAll() {
-        List<StaffTimeCardModel> models = null;
-        List<TblStaffTimeCardEntity> entities = repo.findAll();
+			StaffTimeCardMapping mapping = new StaffTimeCardMapping();
 
-        if (!entities.isEmpty()) {
+			TblStaffTimeCardEntity entity = repo.findById(id)
+					.orElseThrow(() -> new ResourceNotFoundException("StaffTimeCard not found for this id :: " + id));
+			
+			// setup update case
+			TblStaffTimeCardEntity parsingEntity = mapping.modelToEntity(model);
+			parsingEntity.setId(entity.getId());
+			
+			final StaffTimeCardModel updatededModel = mapping.entityToModel(repo.save(parsingEntity));
+			return ResponseEntity.ok(updatededModel);
+			
+		} else {
+			throw new ResourceNotFoundException("Staff information is empty ");
+		}
+	}
 
-            models = new ArrayList<StaffTimeCardModel>();
-            StaffTimeCardModel model = new StaffTimeCardModel();
-            StaffTimeCardMapping roleMapping = new StaffTimeCardMapping();
+	@Override
+	public ResponseEntity<StaffTimeCardModel> getDailyChecking(User loginUser) throws ResourceNotFoundException {
 
-            for (TblStaffTimeCardEntity entity : entities) {
+		if (loginUser != null && StringUtils.isNotEmpty(loginUser.getUsername())) {
 
-                model = roleMapping.entityToModel(entity);
+			StaffTimeCardModel staffTimeCardModel = new StaffTimeCardModel();
 
-                if (model != null)
-                    models.add(model);
-            }
-        }
+			// String currentDate = CommonFunc.dateToString(new Date(), "yyyy-MM-dd");
+			Date currentDate = new Date();
+			log.info("Current date:" + currentDate);
+			log.info("User:" + loginUser.getUsername());
 
-        return models;
-    }
+			try {
+				TblStaffEntity staffEntity = staffRepo.findActivedStaff(loginUser.getUsername(), CommonParam.RC_OPEN);
+
+				if (staffEntity != null) {
+					log.info("Staff id:" + staffEntity.getStaffId());
+					TblStaffTimeCardEntity entity = repo.findStaffDailyChecking(staffEntity.getStaffId(), true,
+							currentDate, CommonParam.RC_OPEN);
+
+					if (entity != null) {
+						staffTimeCardModel = new StaffTimeCardMapping().entityToModel(entity);
+					} else {
+						staffTimeCardModel.setStaffId(staffEntity.getStaffId());
+						staffTimeCardModel.setChecked(false);
+					}
+
+					return ResponseEntity.ok(staffTimeCardModel);
+				}
+			} catch (Exception ex) {
+				throw new ResourceNotFoundException("Can not get user's daily timecard");
+			}
+
+		}
+		throw new ResourceNotFoundException("Username is empty");
+	}
+
+//	@Override
+//	public List<StaffTimeCardModel> getAll() {
+//		List<StaffTimeCardModel> models = null;
+//		List<TblStaffTimeCardEntity> entities = repo.findAll();
+//
+//		if (!entities.isEmpty()) {
+//
+//			models = new ArrayList<StaffTimeCardModel>();
+//			StaffTimeCardModel model = new StaffTimeCardModel();
+//			StaffTimeCardMapping roleMapping = new StaffTimeCardMapping();
+//
+//			for (TblStaffTimeCardEntity entity : entities) {
+//
+//				model = roleMapping.entityToModel(entity);
+//
+//				if (model != null)
+//					models.add(model);
+//			}
+//		}
+//
+//		return models;
+//	}
 }

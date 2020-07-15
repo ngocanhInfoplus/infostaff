@@ -23,5 +23,11 @@ public class UserModel{
 	private String createdUser; 
 
 	private Date createdDate; 
+	
+	private String status;
+	
+	public UserModel(String status) {
+		this.status = status;
+	}
 
 }

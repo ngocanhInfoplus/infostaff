@@ -1,20 +1,26 @@
 package infostaff.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.http.ResponseEntity;
+//import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import infostaff.common.CommonFunc;
 import infostaff.common.CommonParam;
 import infostaff.entity.TblRoleEntity;
+import infostaff.exception.ResourceNotFoundException;
 import infostaff.mapping.RoleMapping;
 import infostaff.model.ResponseModel;
 import infostaff.model.RoleModel;
 import infostaff.repository.TblRoleRepository;
+import infostaff.validation.RoleValidation;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -47,54 +53,83 @@ public class RoleServiceImpl implements IRoleService {
 
 		return models;
 	}
-
+	
 	@Override
-	public ResponseModel insertRole(RoleModel model, User loginedUser) {
-
-		RoleMapping roleMapping = new RoleMapping();
-		TblRoleEntity entity = roleMapping.modelToEntity(model);
-		String code = StringUtils.EMPTY;
-		log.info("Login user: " + loginedUser.getUsername());
+	public RoleModel getRole(Long roleId) {
 		
-		if (entity != null) {
-
-			try {
-				
-				TblRoleEntity result = roleRepo.save(entity);
-				code = (result != null)? CommonParam.CODE_SUCCESS : CommonParam.CODE_FAILED;
-				
-			} catch (Exception ex) {
-				code = CommonParam.CODE_FAILED;
-				log.error("Insert Role error: " + ex.toString());
-			}
-		}else {
-			code = CommonParam.CODE_CONVERT_ERROR;
+		Optional<TblRoleEntity> entities = roleRepo.findById(roleId);
+		
+		if (entities.isPresent()) {
+			
+			TblRoleEntity entity = entities.get();
+			return new RoleMapping().entityToModel(entity);
 		}
-		
-		return CommonFunc.createResponseModelByCode(code);
+
+		return new RoleModel();
 	}
 
 	@Override
-	public ResponseModel updateRole(RoleModel model, User loginedUser) {
-		RoleMapping roleMapping = new RoleMapping();
-		TblRoleEntity entity = roleMapping.modelToEntity(model);
-		String code = StringUtils.EMPTY;
+//	public ResponseModel insertRole(RoleModel model, User loginedUser) {
+	public ResponseEntity<RoleModel> insertRole(RoleModel model) throws ResourceNotFoundException{
 		
-		if (entity != null) {
+		if (model != null) {
 
-			try {
+			RoleValidation validation = new RoleValidation();
+
+			if (validation.validate(model)) {
 				
-				TblRoleEntity result = roleRepo.save(entity);
-				code = (result != null)? CommonParam.CODE_SUCCESS : CommonParam.CODE_FAILED;
+				TblRoleEntity entity = new RoleMapping().modelToEntity(model);
 				
-			} catch (Exception ex) {
-				code = CommonParam.CODE_FAILED;
-				log.error("Update Role error: " + ex.toString());
+				final RoleModel insertedRole = new RoleMapping().entityToModel(roleRepo.save(entity));
+				return ResponseEntity.ok(insertedRole);
+			} else {
+				throw new ResourceNotFoundException("Validation error");
 			}
-		}else {
-			code = CommonParam.CODE_CONVERT_ERROR;
+		} else {
+			throw new ResourceNotFoundException("Role information is empty ");
 		}
-		return CommonFunc.createResponseModelByCode(code);
+		
+	}
+
+	@Override
+	public ResponseEntity<RoleModel> updateRole(Long roleId, RoleModel model) 
+			throws ResourceNotFoundException {
+
+		if (roleId != null) {
+
+			RoleValidation validation = new RoleValidation();
+
+			if (validation.validate(model)) {
+
+				TblRoleEntity roleEntity = roleRepo.findById(roleId)
+						.orElseThrow(() -> new ResourceNotFoundException("Role not found for this id :: " + roleId));
+
+				roleEntity.setRoleName(model.getRoleName());
+
+				final RoleModel updatedRole = new RoleMapping().entityToModel(roleRepo.save(roleEntity));
+				return ResponseEntity.ok(updatedRole);
+			} else {
+				throw new ResourceNotFoundException("Validation error");
+			}
+		} else {
+			throw new ResourceNotFoundException("Role id is empty ");
+		}
+	}
+
+	@Override
+	// public Map<String, Boolean> deleteRole(Long roleId) throws
+	// ResourceNotFoundException {
+	public RoleModel deleteRole(Long roleId) throws ResourceNotFoundException {
+		if (roleId != null) {
+
+			TblRoleEntity roleEntity = roleRepo.findById(roleId)
+					.orElseThrow(() -> new ResourceNotFoundException("Role not found for this id :: " + roleId));
+			roleRepo.deleteById(roleId);
+
+			return new RoleMapping().entityToModel(roleEntity);
+		} else {
+			throw new ResourceNotFoundException("Role id is empty ");
+		}
 	}
 
 }

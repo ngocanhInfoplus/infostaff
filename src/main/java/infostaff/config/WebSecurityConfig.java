@@ -5,25 +5,43 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.RememberMeAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
+import infostaff.service.CustomTokenBasedRememberMeService;
 import infostaff.service.UserDetailsServiceImpl;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+	@Autowired
+	private DataSource dataSource;
 
 	@Autowired
 	private UserDetailsServiceImpl userDetailsService;
 
 	@Autowired
-	private DataSource dataSource;
+	private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
+	@Autowired
+	private JwtRequestFilter jwtRequestFilter;
+
+	private String tokenKey = "infostaff";
 
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {
@@ -37,19 +55,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		// Sét đặt dịch vụ để tìm kiếm User trong Database.
 		// Và sét đặt PasswordEncoder.
 		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+	}
 
+	@Bean
+	@Override
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
 	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
 		http.csrf().disable();
+		http.cors();
 		// Các trang không yêu cầu login
-		http.authorizeRequests().antMatchers("/api/v1.0/infostaff/login", "/api/v1.0/infostaff/logout").permitAll();
-
+		http.authorizeRequests().antMatchers("/api/v1.0/infostaff/authenticate").permitAll();
+		http.authorizeRequests().antMatchers(HttpMethod.OPTIONS, "/**").permitAll();
 		// Trang /userInfo yêu cầu phải login với vai trò ROLE_USER hoặc ROLE_ADMIN.
 		// Nếu chưa login, nó sẽ redirect tới trang /login.
-		//http.authorizeRequests().antMatchers("/api/v1.0/infostaff/*").access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')");
 		http.authorizeRequests().antMatchers("/api/v1.0/infostaff/**").access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')");
 
 		// Trang chỉ dành cho ADMIN
@@ -58,28 +81,55 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		// Khi người dùng đã login, với vai trò XX.
 		// Nhưng truy cập vào trang yêu cầu vai trò YY,
 		// Ngoại lệ AccessDeniedException sẽ ném ra.
-		http.authorizeRequests().and().exceptionHandling().accessDeniedPage("/403");
+		http.authorizeRequests().and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
+				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+		// Add a filter to validate the tokens with every request
+		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+		http.addFilterBefore(rememberMeAuthenticationFilter(), BasicAuthenticationFilter.class);
 
 		// Cấu hình cho Login Form.
 //		http.authorizeRequests().and().formLogin()//
 //				// Submit URL của trang login
-//				.loginProcessingUrl("/j_spring_security_check") // Submit URL
-//				.loginPage("/api/v1.0/infostaff/login")//
-//				.defaultSuccessUrl("/api/v1.0/infostaff/absent")//
+//				.loginProcessingUrl("/api/v1.0/infostaff/validation") // Submit URL
 //				.failureUrl("/api/v1.0/infostaff/login?error=true")//
 //				.usernameParameter("username")//
-//				.passwordParameter("password")
-//				// Cấu hình cho Logout Page.
-//				.and().logout().logoutUrl("/api/v1.0/infostaff/logout")
-//				.logoutSuccessUrl("/api/v1.0/infostaff/logoutSuccessful");
-		
-		http.authorizeRequests().and().httpBasic(); 
+//				.passwordParameter("password");
+
+//		http.authorizeRequests().and().httpBasic(); 
 
 		// Cấu hình Remember Me.
-		http.authorizeRequests().and() //
-				.rememberMe().tokenRepository(this.persistentTokenRepository()) //
-				.tokenValiditySeconds(1 * 24 * 60 * 60); // 24h
+//		http.authorizeRequests().and().formLogin().loginProcessingUrl("/api/v1.0/infostaff/login");
+//		http.authorizeRequests().and() //
+//				.rememberMe().rememberMeParameter("remember-me").tokenRepository(this.persistentTokenRepository()) //
+//				.tokenValiditySeconds(1 * 24 * 60 * 60); // 24h
 
+	}
+
+	/**
+	 * Remember me config
+	 */
+	protected void registerAuthentication(AuthenticationManagerBuilder auth) throws Exception {
+		auth.authenticationProvider(rememberMeAuthenticationProvider());
+	}
+
+	@Bean
+	public RememberMeAuthenticationFilter rememberMeAuthenticationFilter() throws Exception {
+		return new RememberMeAuthenticationFilter(authenticationManager(), tokenBasedRememberMeService());
+	}
+
+	@Bean
+	public CustomTokenBasedRememberMeService tokenBasedRememberMeService() {
+		CustomTokenBasedRememberMeService service = new CustomTokenBasedRememberMeService(tokenKey,
+				userDetailsService);
+		service.setAlwaysRemember(true);
+		service.setCookieName("token");
+		return service;
+	}
+
+	@Bean
+	RememberMeAuthenticationProvider rememberMeAuthenticationProvider() {
+		return new RememberMeAuthenticationProvider(tokenKey);
 	}
 
 	@Bean

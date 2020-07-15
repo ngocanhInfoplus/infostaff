@@ -18,8 +18,8 @@ public class StaffTimeCardValidation {
     }
 
     public boolean cIValid(StaffTimeCardModel model) {
-        if(StringUtils.isNotBlank(model.getStaffId().toString()) || StringUtils.isNotBlank(model.getCheckIn()) || StringUtils.isNotBlank(model.getWorkingDate().toString()))
-            return true;
-        return false;
+    	if(model.getStaffId() == null)
+    		return false;
+    	return true;
     }
 }

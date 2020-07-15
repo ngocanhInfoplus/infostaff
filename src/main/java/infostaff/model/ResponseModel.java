@@ -1,5 +1,7 @@
 package infostaff.model;
 
+import java.util.Date;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,6 +9,7 @@ import lombok.Setter;
 @Setter
 public class ResponseModel {
 	
+	private Date timestamp;
 	private String respCode;
 	private String respMessage;
 	
@@ -18,4 +21,12 @@ public class ResponseModel {
 		this.respCode = respCode;
 		this.respMessage = respMessage;
 	}
+	
+	public ResponseModel(Date timeStamp, String respCode, String respMessage) {
+		this.timestamp = timeStamp;
+		this.respCode = respCode;
+		this.respMessage = respMessage;
+	}
+	
+	
 }

@@ -8,4 +8,7 @@ public class CommonParam {
 	public static final String CODE_NO_DATA_FOUND = "12";
 	public static final String CODE_CONVERT_ERROR = "13";
 	public static final String CODE_VALIDATION_ERROR = "14";
+	
+	public static final String RC_OPEN = "O";
+	public static final String RC_CLOSE = "C";
 }

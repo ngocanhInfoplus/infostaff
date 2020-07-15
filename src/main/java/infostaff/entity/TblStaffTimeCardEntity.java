@@ -9,6 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import lombok.Getter;
 import lombok.Setter; 
@@ -29,12 +31,13 @@ import lombok.Setter;
 	@Column(name = "staff_id", nullable = false, length = 11) 
 	private Long staffId; 
 
+	@Temporal(TemporalType.DATE)
 	@Column(name = "working_date", nullable = false) 
 	private Date workingDate; 
 
 	@Column(name = "check_in") 
 	private String checkIn; 
-
+	
 	@Column(name = "check_out") 
 	private String checkOut; 
 

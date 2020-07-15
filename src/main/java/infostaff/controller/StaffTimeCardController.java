@@ -1,65 +1,66 @@
 package infostaff.controller;
 
-import infostaff.common.CommonFunc;
-import infostaff.model.ResponseModel;
-import infostaff.model.StaffTimeCardModel;
-import infostaff.service.IStaffTimeCardService;
-import infostaff.validation.StaffTimeCardValidation;
-import org.apache.commons.lang3.StringUtils;
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.security.Principal;
-import java.util.List;
+import infostaff.exception.ResourceNotFoundException;
+import infostaff.model.StaffTimeCardModel;
+import infostaff.service.IStaffTimeCardService;
 
-import static infostaff.common.CommonParam.CODE_VALIDATION_ERROR;
-
-
-@Controller
 @RestController
 @RequestMapping("/api/v1.0/infostaff")
 public class StaffTimeCardController {
 
-    @Autowired
-    IStaffTimeCardService service;
+	@Autowired
+	IStaffTimeCardService service;
 
-    StaffTimeCardValidation validation;
+//	@GetMapping(value = "/get-all")
+//	public List<StaffTimeCardModel> getAll() {
+//
+//		return service.getAll();
+//	}
 
-    @GetMapping(value = "/get-timecard")
-    public List<StaffTimeCardModel> getAll() {
+	@PostMapping(value = "/check-in", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<StaffTimeCardModel> checkIn(@RequestBody StaffTimeCardModel model, Principal principal)
+			throws ResourceNotFoundException {
 
-        return service.getAll();
-    }
+		User user = (User) ((Authentication) principal).getPrincipal();
+		return service.checkIn(model, user);
+	}
 
-    @PostMapping(value = "/check-in",consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseModel CheckIn(@RequestBody StaffTimeCardModel model, Principal principal) {
-        User user = (User) ((Authentication) principal).getPrincipal();
-        if(!validation.cIValid(model))
-            return CommonFunc.createResponseModelByCode(CODE_VALIDATION_ERROR);
-        return service.insert(model, user);
-    }
+	@PutMapping(value = "/check-out/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<StaffTimeCardModel> checkOut(@PathVariable(value = "id") Long id,
+			@RequestBody StaffTimeCardModel model, Principal principal) throws ResourceNotFoundException {
 
-    @PostMapping(value = "/check-out",consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseModel CheckOut(@RequestBody StaffTimeCardModel model, Principal principal) {
+		User user = (User) ((Authentication) principal).getPrincipal();
+		return service.checkOut(id, model, user);
+	}
 
-        User user = (User) ((Authentication) principal).getPrincipal();
-        if(!validation.cOValid(model))
-            return CommonFunc.createResponseModelByCode(CODE_VALIDATION_ERROR);
-        return service.checkOut(model, user);
-    }
+	@PostMapping(value = "/update/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<StaffTimeCardModel> update(@PathVariable(value = "id") Long id,
+			@RequestBody StaffTimeCardModel model, Principal principal) throws ResourceNotFoundException {
 
-    @PostMapping(value = "/change-timecard",consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseModel ChangeTimeCard(@RequestBody StaffTimeCardModel model, Principal principal) {
+		User user = (User) ((Authentication) principal).getPrincipal();
+		return service.update(id, model, user);
+	}
 
-        User user = (User) ((Authentication) principal).getPrincipal();
-        if(!validation.cTCValid(model))
-            return CommonFunc.createResponseModelByCode(CODE_VALIDATION_ERROR);
-        return service.update(model, user);
-    }
+	@GetMapping(value = "/get-daily-checked")
+	public ResponseEntity<StaffTimeCardModel> getDailyChecking(Principal principal) throws ResourceNotFoundException {
 
+		User loginUser = (User) ((Authentication) principal).getPrincipal();
+		return service.getDailyChecking(loginUser);
+	}
 
 }

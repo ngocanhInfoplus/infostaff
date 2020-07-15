@@ -1,5 +1,10 @@
 package infostaff.common;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import org.apache.commons.lang3.StringUtils;
+
 import infostaff.model.ResponseModel;
 
 public class CommonFunc {
@@ -22,5 +27,12 @@ public class CommonFunc {
 		default:
 			return new ResponseModel();
 		}
+	}
+	
+	public static String dateToString(Date date, String format) {
+		if (date == null)
+			return StringUtils.EMPTY;
+
+		return new SimpleDateFormat(format).format(date);
 	}
 }
