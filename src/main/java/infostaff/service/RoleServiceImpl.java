@@ -1,29 +1,21 @@
 package infostaff.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 //import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
-import infostaff.common.CommonFunc;
-import infostaff.common.CommonParam;
 import infostaff.entity.TblRoleEntity;
 import infostaff.exception.ResourceNotFoundException;
 import infostaff.mapping.RoleMapping;
-import infostaff.model.ResponseModel;
 import infostaff.model.RoleModel;
 import infostaff.repository.TblRoleRepository;
 import infostaff.validation.RoleValidation;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Service
 public class RoleServiceImpl implements IRoleService {
 

@@ -1,18 +1,23 @@
 package infostaff.validation;
 
-import infostaff.model.StaffTimeCardModel;
 import org.apache.commons.lang3.StringUtils;
+
+import infostaff.model.StaffTimeCardModel;
 
 public class StaffTimeCardValidation {
 
     public boolean cTCValid(StaffTimeCardModel model) {
-        if(StringUtils.isNotBlank(model.getStaffId().toString()) || StringUtils.isNotBlank(model.getCheckOut()) || StringUtils.isNotBlank(model.getWorkingDate().toString()))
+        if(model.getStaffId() == null 
+        		|| StringUtils.isNotBlank(model.getCheckOut()) 
+        		|| model.getWorkingDate() == null)
             return true;
         return false;
     }
 
     public boolean cOValid(StaffTimeCardModel model) {
-        if(StringUtils.isNotBlank(model.getStaffId().toString()) || StringUtils.isNotBlank(model.getCheckOut()) || StringUtils.isNotBlank(model.getWorkingDate().toString()))
+        if(model.getStaffId() == null 
+        		|| StringUtils.isNotBlank(model.getCheckOut()) 
+        		|| model.getWorkingDate() == null)
             return true;
         return false;
     }

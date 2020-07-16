@@ -1,8 +1,6 @@
 package infostaff.service;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +14,6 @@ import infostaff.entity.TblStaffEntity;
 import infostaff.entity.TblStaffTimeCardEntity;
 import infostaff.exception.ResourceNotFoundException;
 import infostaff.mapping.StaffTimeCardMapping;
-import infostaff.model.ResponseModel;
 import infostaff.model.StaffTimeCardModel;
 import infostaff.repository.TblStaffRepository;
 import infostaff.repository.TblStaffTimeCardRepository;
