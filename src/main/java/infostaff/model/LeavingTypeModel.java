@@ -11,7 +11,7 @@ import lombok.ToString;
 @Getter 
 @Setter 
 @ToString 
-public class TblLeavingTypeModel{ 
+public class LeavingTypeModel {
 	private String leavingCode; 
 
 	private String leavingName; 

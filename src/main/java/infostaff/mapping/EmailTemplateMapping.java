@@ -1,15 +1,15 @@
 package infostaff.mapping;
 
 import infostaff.entity.TblEmailTemplateEntity;
-import infostaff.model.TblEmailTemplateModel;
+import infostaff.model.EmailTemplateModel;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class EmailTemplateMapping {
 
-	public TblEmailTemplateModel entityToModel(TblEmailTemplateEntity entity){ 
+	public EmailTemplateModel entityToModel(TblEmailTemplateEntity entity){
 		
-		TblEmailTemplateModel model  = new TblEmailTemplateModel(); 
+		EmailTemplateModel model  = new EmailTemplateModel();
 		try{ 
 			model.setTemplateCode(entity.getTemplateCode()); 
 			model.setTemplateContent(entity.getTemplateContent()); 
@@ -28,7 +28,7 @@ public class EmailTemplateMapping {
 			return null; 
 		} 
 	} 
-	public TblEmailTemplateEntity modelToEntity(TblEmailTemplateModel model){ 
+	public TblEmailTemplateEntity modelToEntity(EmailTemplateModel model){
 	
 		TblEmailTemplateEntity entity  = new TblEmailTemplateEntity(); 
 		try{ 

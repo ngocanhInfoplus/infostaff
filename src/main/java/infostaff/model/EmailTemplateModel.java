@@ -11,7 +11,7 @@ import lombok.ToString;
 @Getter 
 @Setter 
 @ToString 
-public class TblEmailTemplateModel{ 
+public class EmailTemplateModel {
 	private String templateCode; 
 
 	private String templateContent; 

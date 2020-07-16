@@ -1,15 +1,15 @@
 package infostaff.mapping;
 
 import infostaff.entity.TblStaffLeavingEntity;
-import infostaff.model.TblStaffLeavingModel;
+import infostaff.model.StaffLeavingModel;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j 
 public class StaffLeavingMapping {
 
-	public TblStaffLeavingModel entityToModel(TblStaffLeavingEntity entity){ 
+	public StaffLeavingModel entityToModel(TblStaffLeavingEntity entity){
 		
-		TblStaffLeavingModel model  = new TblStaffLeavingModel(); 
+		StaffLeavingModel model  = new StaffLeavingModel();
 		try{ 
 			model.setId(entity.getId()); 
 			model.setStaffId(entity.getStaffId()); 
@@ -38,7 +38,7 @@ public class StaffLeavingMapping {
 		} 
 	} 
 	
-	public TblStaffLeavingEntity modelToEntity(TblStaffLeavingModel model){ 
+	public TblStaffLeavingEntity modelToEntity(StaffLeavingModel model){
 	
 		TblStaffLeavingEntity entity  = new TblStaffLeavingEntity(); 
 		try{ 

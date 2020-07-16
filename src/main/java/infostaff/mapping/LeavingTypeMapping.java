@@ -1,15 +1,15 @@
 package infostaff.mapping;
 
 import infostaff.entity.TblLeavingTypeEntity;
-import infostaff.model.TblLeavingTypeModel;
+import infostaff.model.LeavingTypeModel;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j 
 public class LeavingTypeMapping {
 	
-	public TblLeavingTypeModel entityToModel(TblLeavingTypeEntity entity){ 
+	public LeavingTypeModel entityToModel(TblLeavingTypeEntity entity){
 		
-		TblLeavingTypeModel model  = new TblLeavingTypeModel(); 
+		LeavingTypeModel model  = new LeavingTypeModel();
 		try{ 
 			model.setLeavingCode(entity.getLeavingCode()); 
 			model.setLeavingName(entity.getLeavingName()); 
@@ -24,7 +24,7 @@ public class LeavingTypeMapping {
 		} 
 	} 
 	
-	public TblLeavingTypeEntity modelToEntity(TblLeavingTypeModel model){ 
+	public TblLeavingTypeEntity modelToEntity(LeavingTypeModel model){
 	
 		TblLeavingTypeEntity entity  = new TblLeavingTypeEntity(); 
 		try{ 

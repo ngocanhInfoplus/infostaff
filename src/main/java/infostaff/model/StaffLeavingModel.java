@@ -11,7 +11,7 @@ import lombok.ToString;
 @Getter 
 @Setter 
 @ToString 
-public class TblStaffLeavingModel{ 
+public class StaffLeavingModel {
 	private Long id; 
 
 	private Long staffId; 
