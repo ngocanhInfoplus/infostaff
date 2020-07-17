@@ -1,7 +1,9 @@
-package infostaff.config;
+package infostaff.security;
 
 import javax.sql.DataSource;
 
+import infostaff.config.JwtAuthenticationEntryPoint;
+import infostaff.config.JwtRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,8 +23,8 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 import org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
-import infostaff.service.CustomTokenBasedRememberMeService;
-import infostaff.service.UserDetailsServiceImpl;
+import infostaff.service.impl.CustomTokenBasedRememberMeService;
+import infostaff.service.impl.UserDetailsServiceImpl;
 
 @Configuration
 @EnableWebSecurity

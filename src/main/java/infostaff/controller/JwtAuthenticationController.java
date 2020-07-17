@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import infostaff.config.JwtTokenUtil;
 import infostaff.model.JwtRequest;
-import infostaff.model.JwtResponse;
+import infostaff.model.response.JwtResponse;
 
 @RestController
 @RequestMapping("/api/v1.0/infostaff")

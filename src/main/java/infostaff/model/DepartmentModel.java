@@ -1,12 +1,10 @@
-package infostaff.model; 
-
-import java.util.Date;
+package infostaff.model;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString; 
+import lombok.ToString;
 
-
+import java.util.Date;
 
 @Getter 
 @Setter 

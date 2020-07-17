@@ -1,4 +1,4 @@
-package infostaff.common;
+package infostaff.constans;
 
 public class CommonParam {
 

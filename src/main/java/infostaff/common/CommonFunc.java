@@ -3,6 +3,7 @@ package infostaff.common;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import infostaff.constans.CommonParam;
 import org.apache.commons.lang3.StringUtils;
 
 import infostaff.model.ResponseModel;

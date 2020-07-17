@@ -1,4 +1,4 @@
-package infostaff.service;
+package infostaff.service.impl;
 
 import javax.servlet.http.HttpServletRequest;
 
