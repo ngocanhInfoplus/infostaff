@@ -6,11 +6,11 @@ import infostaff.model.RoleModel;
 
 public class RoleValidation {
 	
-	public boolean validate(RoleModel model){ 
-		
-		if(StringUtils.isEmpty(model.getRoleName())) 
-			return false; 
+	public boolean validate(RoleModel model) {
 
-		return true; 
-} 
+		if (StringUtils.isEmpty(model.getRoleName()))
+			return false;
+
+		return true;
+	} 
 }

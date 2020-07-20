@@ -11,4 +11,8 @@ public class CommonParam {
 	
 	public static final String RC_OPEN = "O";
 	public static final String RC_CLOSE = "C";
+	
+	public static final String ERR_MSG_VAL = "Validation error. Please check input data again!";
+	public static final String ERR_MSG_SYS = "Can not process! Contact to Admin for support";
+	public static final String ERR_MSG_PARSE = "Parsing data error. Please check input data again!";
 }

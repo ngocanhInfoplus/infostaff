@@ -30,7 +30,7 @@ import lombok.Setter;
 	private Long id; 
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_name", nullable = false)
     private TblUserEntity tblUserEntity;
  
     @ManyToOne(fetch = FetchType.LAZY)

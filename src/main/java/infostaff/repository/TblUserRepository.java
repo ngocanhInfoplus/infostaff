@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import infostaff.entity.TblUserEntity;
 
 @Repository
-public interface TblUserRepository extends JpaRepository<TblUserEntity, Long> {
+public interface TblUserRepository extends JpaRepository<TblUserEntity, String> {
 
 	TblUserEntity findByUserName(String userName);
 }

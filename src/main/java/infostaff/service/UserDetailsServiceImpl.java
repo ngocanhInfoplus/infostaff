@@ -38,7 +38,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		}
 			
 		log.info("Found user: " + username);
-		List<String> roleNames = tblUserRoleRepo.getRoleNames(userEntity.getUserId());
+		List<String> roleNames = tblUserRoleRepo.getRoleNames(userEntity.getUserName());
 		
 		List<GrantedAuthority> grantList = new ArrayList<GrantedAuthority>();
         if (roleNames != null) {

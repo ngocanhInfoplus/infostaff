@@ -12,7 +12,6 @@ import lombok.ToString;
 @Setter 
 @ToString 
 public class UserModel{ 
-	private Long userId; 
 
 	private String userName; 
 
@@ -25,6 +24,14 @@ public class UserModel{
 	private Date createdDate; 
 	
 	private String status;
+	
+	private String roleName;
+	
+	private String token;
+	
+	public UserModel() {
+		super();
+	}
 	
 	public UserModel(String status) {
 		this.status = status;
