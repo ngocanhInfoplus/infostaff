@@ -1,10 +1,14 @@
 package infostaff.service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +33,9 @@ public class StaffTimeCardServiceImpl implements IStaffTimeCardService {
 
 	@Autowired
 	TblStaffRepository staffRepo;
+
+	final String ROLE_MANAGER = "ROLE_MANGER";
+	final String ROLE_USER = "ROLE_USER";
 
 	@Override
 	public ResponseEntity<StaffTimeCardModel> checkIn(StaffTimeCardModel model, User user)
@@ -66,31 +73,31 @@ public class StaffTimeCardServiceImpl implements IStaffTimeCardService {
 			throw new ResourceNotFoundException("Staff information is empty ");
 		}
 	}
-	
+
 	@Override
 	public ResponseEntity<StaffTimeCardModel> checkOut(Long id, StaffTimeCardModel model, User user)
 			throws ResourceNotFoundException {
-		
+
 		if (id != null) {
 
 			StaffTimeCardMapping mapping = new StaffTimeCardMapping();
 
 			TblStaffTimeCardEntity entity = repo.findById(id)
 					.orElseThrow(() -> new ResourceNotFoundException("StaffTimeCard not found for this id :: " + id));
-			
+
 			// setup check out case
 			entity.setCheckOut(CommonFunc.dateToString(new Date(), "hh:mm:ss"));
-			
+
 			final StaffTimeCardModel updatededModel = mapping.entityToModel(repo.save(entity));
 			return ResponseEntity.ok(updatededModel);
-			
+
 		} else {
 			throw new ResourceNotFoundException("Staff information is empty ");
 		}
 	}
-	
+
 	@Override
-	public ResponseEntity<StaffTimeCardModel> update(Long id, StaffTimeCardModel model, User user) 
+	public ResponseEntity<StaffTimeCardModel> update(Long id, StaffTimeCardModel model, User user)
 			throws ResourceNotFoundException {
 		if (id != null) {
 
@@ -98,14 +105,14 @@ public class StaffTimeCardServiceImpl implements IStaffTimeCardService {
 
 			TblStaffTimeCardEntity entity = repo.findById(id)
 					.orElseThrow(() -> new ResourceNotFoundException("StaffTimeCard not found for this id :: " + id));
-			
+
 			// setup update case
 			TblStaffTimeCardEntity parsingEntity = mapping.modelToEntity(model);
 			parsingEntity.setId(entity.getId());
-			
+
 			final StaffTimeCardModel updatededModel = mapping.entityToModel(repo.save(parsingEntity));
 			return ResponseEntity.ok(updatededModel);
-			
+
 		} else {
 			throw new ResourceNotFoundException("Staff information is empty ");
 		}
@@ -146,6 +153,62 @@ public class StaffTimeCardServiceImpl implements IStaffTimeCardService {
 
 		}
 		throw new ResourceNotFoundException("Username is empty");
+	}
+
+	@Override
+	public List<StaffTimeCardModel> getStaffTimeCard(User user, StaffTimeCardModel model) {
+
+		if (user == null)
+			return null;
+
+		log.info("User name: " + user.getUsername());
+
+		// get main menu
+		String roleName = StringUtils.EMPTY;
+		Iterator<GrantedAuthority> grantedAuthority = user.getAuthorities().iterator();
+
+		if (grantedAuthority.hasNext())
+			roleName = grantedAuthority.next().toString();
+		log.info("Role name: " + roleName);
+
+		List<StaffTimeCardModel> result = new ArrayList<StaffTimeCardModel>();
+		List<TblStaffTimeCardEntity> entities = null;
+		StaffTimeCardMapping mapping = new StaffTimeCardMapping();
+
+		TblStaffEntity staffEntity = staffRepo.findActivedStaff(user.getUsername(), CommonParam.RC_OPEN);
+		entities = repo.findTimeCardByStaff(staffEntity.getStaffId(), model.getFromDate(), model.getToDate(),
+				CommonParam.RC_OPEN);
+		
+//		switch (roleName) {
+//		case ROLE_USER:
+//			TblStaffEntity staffEntity = staffRepo.findActivedStaff(user.getUsername(), CommonParam.RC_OPEN);
+//			entities = repo.findTimeCardByStaff(staffEntity.getStaffId(), model.getFromDate(), model.getToDate(),
+//					CommonParam.RC_OPEN);
+//			break;
+//		case ROLE_MANAGER:
+//			if (model.getGroupId() == null)
+//				entities = repo.findTimeCardByManager(model.getFromDate(), model.getToDate(), CommonParam.RC_OPEN);
+//			else
+//				entities = repo.findTimeCardByManagerAndGroupId(model.getGroupId(), model.getFromDate(),
+//						model.getToDate(), CommonParam.RC_OPEN);
+//			break;
+//		default:
+//			//entities = repo.findTimeCardByManager(model.getFromDate(), model.getToDate(), CommonParam.RC_OPEN);
+//			entities = repo.findTimeCardByManagerAndGroupId(model.getGroupId(), model.getFromDate(),
+//					model.getToDate(), CommonParam.RC_OPEN);
+//			break;
+//		}
+
+		if (entities.isEmpty() || entities == null)
+			return null;
+
+		log.info("Total: " + entities.size());
+		
+		for(TblStaffTimeCardEntity entity: entities) {
+			result.add(mapping.entityToModel(entity));
+		}
+		
+		return result;
 	}
 
 //	@Override

@@ -1,5 +1,7 @@
 package infostaff.service;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
 
@@ -52,4 +54,6 @@ public interface IStaffTimeCardService {
 			throws ResourceNotFoundException;
 	
 	//List<StaffTimeCardModel> getAll();
+	
+	List<StaffTimeCardModel> getStaffTimeCard(User loginUser, StaffTimeCardModel model);
 }

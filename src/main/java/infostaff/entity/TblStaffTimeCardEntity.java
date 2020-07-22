@@ -5,9 +5,12 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -28,8 +31,12 @@ import lombok.Setter;
 	@Column(name = "id", nullable = false, length = 11) 
 	private Long id; 
 
-	@Column(name = "staff_id", nullable = false, length = 11) 
-	private Long staffId; 
+//	@Column(name = "staff_id", nullable = false, length = 11) 
+//	private Long staffId; 
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "staff_id", nullable = false)
+    private TblStaffEntity tblStaffEntity;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name = "working_date", nullable = false) 

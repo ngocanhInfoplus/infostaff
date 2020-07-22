@@ -2,6 +2,7 @@ package infostaff.mapping;
 
 import org.springframework.stereotype.Component;
 
+import infostaff.entity.TblStaffEntity;
 import infostaff.entity.TblStaffTimeCardEntity;
 import infostaff.model.StaffTimeCardModel;
 import lombok.extern.slf4j.Slf4j; 
@@ -15,7 +16,8 @@ public class StaffTimeCardMapping{
 		StaffTimeCardModel model  = new StaffTimeCardModel(); 
 		try{ 
 			model.setId(entity.getId()); 
-			model.setStaffId(entity.getStaffId()); 
+			//model.setStaffId(entity.getStaffId());
+			model.setStaffId(entity.getTblStaffEntity().getStaffId());
 			model.setWorkingDate(entity.getWorkingDate()); 
 			model.setCheckIn(entity.getCheckIn()); 
 			model.setCheckOut(entity.getCheckOut()); 
@@ -27,6 +29,8 @@ public class StaffTimeCardMapping{
 			model.setChangedUser(entity.getChangedUser()); 
 			model.setChangedDate(entity.getChangedDate()); 
 			model.setRecordStatus(entity.getRecordStatus()); 
+			model.setStaffCode(entity.getTblStaffEntity().getStaffCode());
+			model.setStaffName(entity.getTblStaffEntity().getStaffName());
 	
 			return model; 
 		} catch(Exception ex){ 
@@ -39,7 +43,11 @@ public class StaffTimeCardMapping{
 		TblStaffTimeCardEntity entity  = new TblStaffTimeCardEntity(); 
 		try{ 
 			entity.setId(model.getId()); 
-			entity.setStaffId(model.getStaffId()); 
+			//entity.setStaffId(model.getStaffId());
+			TblStaffEntity staffEntity = new TblStaffEntity();
+			staffEntity.setStaffId(model.getStaffId());
+			entity.setTblStaffEntity(staffEntity);
+			
 			entity.setWorkingDate(model.getWorkingDate()); 
 			entity.setCheckIn(model.getCheckIn()); 
 			entity.setCheckOut(model.getCheckOut()); 
