@@ -25,7 +25,13 @@ public interface TblMenuRepository extends JpaRepository<TblMenuEntity, Long>{
 	
 	
 	@Query("SELECT a FROM TblMenuEntity a "
-			+ "WHERE a.recordStatus = 'O'"
+			+ "WHERE a.recordStatus = :recordStatus"
 			+ " ORDER BY a.groupId, a.orderBy")
 	List<TblMenuEntity> findAllMenu(String recordStatus);
+	
+	@Query("SELECT a FROM TblMenuEntity a "
+			+ "WHERE a.recordStatus = :recordStatus "
+			+ "AND a.parentMenuId = '0'"
+			+ "ORDER BY a.groupId, a.orderBy")
+	List<TblMenuEntity> findAllParentMenu(String recordStatus);
 }

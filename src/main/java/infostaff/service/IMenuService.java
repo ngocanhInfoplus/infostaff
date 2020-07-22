@@ -20,4 +20,6 @@ public interface IMenuService {
 	List<MenuModel> getMenuByRole(User user); 
 	
 	List<MenuModel> getAllMenu();
+	
+	List<MenuModel> getParentMenu();
 }

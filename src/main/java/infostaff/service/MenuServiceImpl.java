@@ -102,6 +102,27 @@ public class MenuServiceImpl implements IMenuService {
 		
 		return lstMenuModel;
 	}
+	
+	public List<MenuModel> getParentMenu() {
+
+		List<TblMenuEntity> menuEntities = menuRepo.findAllParentMenu(CommonParam.RC_OPEN);
+		
+		if(menuEntities == null || menuEntities.isEmpty())
+			return null;
+		
+		MenuModel menuModel;
+		List<MenuModel> lstMenuModel = new ArrayList<MenuModel>();
+		MenuMapping mapping = new MenuMapping();
+		
+		for(TblMenuEntity entity: menuEntities) {
+			menuModel = mapping.entityToModel(entity);
+			
+			if(menuModel != null)
+				lstMenuModel.add(menuModel);
+		}
+		
+		return lstMenuModel;
+	}
 
 	public MenuModel createMenu(User user, MenuModel menuModel) throws ResourceNotFoundException {
 
@@ -116,7 +137,8 @@ public class MenuServiceImpl implements IMenuService {
 
 		if (entity == null)
 			throw new ResourceNotFoundException(CommonParam.ERR_MSG_PARSE);
-
+		
+		entity.setRecordStatus(CommonParam.RC_OPEN);
 		entity.setCreatedUser(user.getUsername());
 		entity.setCreatedDate(new Date());
 

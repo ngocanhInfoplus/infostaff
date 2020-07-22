@@ -5,6 +5,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -20,6 +22,7 @@ public class TblMenuEntity implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "menu_id", nullable = false, length = 11)
 	private Long menuId;
 
@@ -54,6 +57,6 @@ public class TblMenuEntity implements Serializable{
 	private Long parentMenuId;
 
 	@Column(name = "group_id", length = 10)
-	private Integer groupId;
+	private Long groupId;
 
 }

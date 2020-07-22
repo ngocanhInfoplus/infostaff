@@ -33,7 +33,7 @@ public class MenuModel {
 
 	private Long parentMenuId; 
 
-	private Integer groupId; 
+	private Long groupId; 
 	
 	private List<MenuModel> subMenus;
 }

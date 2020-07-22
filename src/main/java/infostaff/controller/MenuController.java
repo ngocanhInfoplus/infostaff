@@ -40,6 +40,17 @@ public class MenuController {
 		return ResponseEntity.ok(menus);
 	}
 	
+	@GetMapping(value="/get-parent")
+	public ResponseEntity<List<MenuModel>> getParentMenu(){
+		
+		List<MenuModel> menus = menuService.getParentMenu();
+		
+		if(menus == null || menus.isEmpty())
+			return ResponseEntity.notFound().build();
+		
+		return ResponseEntity.ok(menus);
+	}
+	
 	@GetMapping(value="/get-all")
 	public ResponseEntity<List<MenuModel>> getAll(){
 		
