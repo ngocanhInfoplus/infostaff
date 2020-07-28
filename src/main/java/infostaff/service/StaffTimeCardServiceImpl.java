@@ -24,6 +24,8 @@ import infostaff.repository.TblStaffTimeCardRepository;
 import infostaff.validation.StaffTimeCardValidation;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.persistence.GenerationType;
+
 @Slf4j
 @Service
 public class StaffTimeCardServiceImpl implements IStaffTimeCardService {
@@ -87,6 +89,8 @@ public class StaffTimeCardServiceImpl implements IStaffTimeCardService {
 
 			// setup check out case
 			entity.setCheckOut(CommonFunc.dateToString(new Date(), "hh:mm:ss"));
+			entity.setChangedDate( new Date());
+			entity.setChangedUser(user.getUsername());
 
 			final StaffTimeCardModel updatededModel = mapping.entityToModel(repo.save(entity));
 			return ResponseEntity.ok(updatededModel);

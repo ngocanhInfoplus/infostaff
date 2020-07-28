@@ -29,7 +29,8 @@ public class StaffLeavingMapping {
 			model.setChangedDate(entity.getChangedDate()); 
 			model.setApprovedUser(entity.getApprovedUser()); 
 			model.setApprovedDate(entity.getApprovedDate()); 
-			model.setRecordStatus(entity.getRecordStatus()); 
+			model.setRecordStatus(entity.getRecordStatus());
+			model.setTotalHour(entity.getTotalHour());
 	
 			return model; 
 		} catch(Exception ex){ 
@@ -60,7 +61,8 @@ public class StaffLeavingMapping {
 			entity.setChangedDate(model.getChangedDate()); 
 			entity.setApprovedUser(model.getApprovedUser()); 
 			entity.setApprovedDate(model.getApprovedDate()); 
-			entity.setRecordStatus(model.getRecordStatus()); 
+			entity.setRecordStatus(model.getRecordStatus());
+			entity.setTotalHour(model.getTotalHour());
 	
 			return entity; 
 		} catch(Exception ex){ 

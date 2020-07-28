@@ -74,6 +74,9 @@ public class TblStaffLeavingEntity implements Serializable{
 	private Date approvedDate; 
 
 	@Column(name = "record_status", length = 1) 
-	private String recordStatus; 
+	private String recordStatus;
+
+	@Column(name = "total_hour", length = 2)
+	private int totalHour;
 
 }

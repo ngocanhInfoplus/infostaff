@@ -48,6 +48,8 @@ public class StaffLeavingModel {
 
 	private Date approvedDate; 
 
-	private String recordStatus; 
+	private String recordStatus;
+
+	private int totalHour;
 
 }
