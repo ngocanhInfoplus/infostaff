@@ -1,7 +1,10 @@
 package infostaff.controller;
 
+import infostaff.exception.BadRequestException;
 import infostaff.exception.ResourceNotFoundException;
 import infostaff.model.StaffLeavingModel;
+import infostaff.model.request.StaffLeavingRequest;
+import infostaff.model.response.StaffLeavingResponse;
 import infostaff.service.IStaffLeavingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.security.Principal;
 
 @RestController
@@ -23,10 +27,10 @@ public class StaffLeavingController {
     IStaffLeavingService service;
 
     @PostMapping(value = "/create-leaving-request", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<StaffLeavingModel> CreateLeaving(@RequestBody StaffLeavingModel model, Principal principal)
-            throws ResourceNotFoundException {
+    public ResponseEntity<StaffLeavingResponse> CreateLeaving(@RequestBody @Valid StaffLeavingRequest request, Principal principal)
+            throws BadRequestException {
 
         User user = (User) ((Authentication) principal).getPrincipal();
-        return ResponseEntity.ok(service.CreateLeaving(model, user));
+        return ResponseEntity.ok(service.createLeaving(request, user));
     }
 }
