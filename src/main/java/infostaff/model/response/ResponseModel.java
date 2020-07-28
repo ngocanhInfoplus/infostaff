@@ -1,4 +1,4 @@
-package infostaff.model;
+package infostaff.model.response;
 
 import java.util.Date;
 

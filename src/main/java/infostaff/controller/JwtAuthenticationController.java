@@ -1,7 +1,6 @@
 package infostaff.controller;
 
 import java.util.Iterator;
-import java.util.List;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +17,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import infostaff.config.JwtTokenUtil;
-import infostaff.model.JwtRequest;
-import infostaff.model.JwtResponse;
+import infostaff.model.request.JwtRequest;
 import infostaff.model.UserModel;
-import infostaff.service.UserDetailsServiceImpl;
+import infostaff.service.impl.UserDetailsServiceImpl;
 
 @RestController
 @RequestMapping("/api/v1.0/infostaff")

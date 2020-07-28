@@ -2,7 +2,6 @@ package infostaff.controller;
 
 import infostaff.exception.ResourceNotFoundException;
 import infostaff.model.StaffLeavingModel;
-import infostaff.model.StaffTimeCardModel;
 import infostaff.service.IStaffLeavingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

@@ -1,5 +1,6 @@
 package infostaff.service;
 
+import infostaff.exception.BadRequestException;
 import infostaff.exception.ResourceNotFoundException;
 import infostaff.model.StaffLeavingModel;
 import infostaff.model.StaffTimeCardModel;
@@ -17,5 +18,5 @@ public interface IStaffLeavingService {
      * @throws ResourceNotFoundException
      */
     StaffLeavingModel CreateLeaving(StaffLeavingModel model, User user)
-            throws ResourceNotFoundException;
+            throws ResourceNotFoundException, BadRequestException;
 }

@@ -1,11 +1,11 @@
-package infostaff.service;
+package infostaff.service.impl;
 
 import infostaff.entity.TblStaffLeavingEntity;
-import infostaff.exception.ResourceNotFoundException;
+import infostaff.exception.BadRequestException;
 import infostaff.mapping.StaffLeavingMapping;
 import infostaff.model.StaffLeavingModel;
 import infostaff.repository.TblStaffLeavingRepository;
-import infostaff.validation.StaffLeavingValidation;
+import infostaff.service.IStaffLeavingService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
@@ -15,27 +15,21 @@ import java.util.Date;
 
 @Slf4j
 @Service
-public class StaffLeavingServiceImpl implements IStaffLeavingService{
+public class StaffLeavingServiceImpl implements IStaffLeavingService {
 
     @Autowired
     TblStaffLeavingRepository repo;
 
     @Override
     public StaffLeavingModel CreateLeaving(StaffLeavingModel model, User user)
-            throws ResourceNotFoundException {
+            throws BadRequestException {
 
-        StaffLeavingValidation validation = new StaffLeavingValidation();
         StaffLeavingMapping mapping = new StaffLeavingMapping();
-
-        if(!validation.validate(model))
-            throw new ResourceNotFoundException("Validation error");
 
         TblStaffLeavingEntity entity = mapping.modelToEntity(model);
 
         if(entity == null)
-            throw new ResourceNotFoundException("Parsing error");
-
-
+            throw new BadRequestException("Parsing error");
 
         entity.setCreatedUser(user.getUsername());
         entity.setCreatedDate(new Date());

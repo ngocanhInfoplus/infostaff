@@ -21,8 +21,8 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 import org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
-import infostaff.service.CustomTokenBasedRememberMeService;
-import infostaff.service.UserDetailsServiceImpl;
+import infostaff.service.impl.CustomTokenBasedRememberMeService;
+import infostaff.service.impl.UserDetailsServiceImpl;
 
 @Configuration
 @EnableWebSecurity

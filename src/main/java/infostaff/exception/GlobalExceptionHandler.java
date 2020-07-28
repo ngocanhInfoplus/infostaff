@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
-import infostaff.model.ResponseModel;
+import infostaff.model.response.ResponseModel;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -23,5 +23,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> globleExcpetionHandler(Exception ex, WebRequest request) {
     	ResponseModel errorDetails = new ResponseModel(new Date(), ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<?> badRequestException(BadRequestException ex, WebRequest request) {
+        ResponseModel errorDetails = new ResponseModel(new Date(), ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 }

@@ -1,4 +1,4 @@
-package infostaff.model;
+package infostaff.model.request;
 
 import java.io.Serializable;
 

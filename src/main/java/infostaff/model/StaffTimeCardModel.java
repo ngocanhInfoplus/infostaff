@@ -10,42 +10,43 @@ import lombok.ToString;
 @Setter
 @ToString
 public class StaffTimeCardModel {
-	private Long id;
 
-	private Long staffId;
+    private Long id;
 
-	private Date workingDate;
+    private Long staffId;
 
-	private String checkIn;
+    private Date workingDate;
 
-	private String checkOut;
+    private String checkIn;
 
-	private boolean isChecked;
+    private String checkOut;
 
-	private String note;
+    private boolean isChecked;
 
-	private String fileName;
+    private String note;
 
-	private String createdUser;
+    private String fileName;
 
-	private Date createdDate;
+    private String createdUser;
 
-	private String changedUser;
+    private Date createdDate;
 
-	private Date changedDate;
+    private String changedUser;
 
-	private String recordStatus;
+    private Date changedDate;
 
-	// for search
-	private Date fromDate;
-	
-	private Date toDate;
-	
-	private Long groupId;
-	
-	private String staffCode;
-	
-	private String staffName;
-	//end search
+    private String recordStatus;
+
+    // for search
+    private Date fromDate;
+
+    private Date toDate;
+
+    private Long groupId;
+
+    private String staffCode;
+
+    private String staffName;
+    //end search
 
 }
