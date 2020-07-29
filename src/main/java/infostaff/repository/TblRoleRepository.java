@@ -7,5 +7,5 @@ import infostaff.entity.TblRoleEntity;
 
 @Repository
 public interface TblRoleRepository extends JpaRepository<TblRoleEntity, Long>{
-
+	
 }

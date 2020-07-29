@@ -23,6 +23,13 @@ public interface TblMenuRepository extends JpaRepository<TblMenuEntity, Long>{
 			+ "ORDER BY a.tblMenuEntity.menuId")
 	List<TblMenuEntity> findMenusByRoleNameAndParentId(@Param("roleName") String roleName, @Param("parentMenuId") Long parentMenuId);
 	
+	@Query("SELECT a.tblMenuEntity FROM TblRoleMenuEntity a "
+			+ "WHERE a.tblRoleEntity.roleName = :roleName "
+			+ "AND a.tblMenuEntity.parentMenuId != :parentMenuId "
+			+ "AND a.tblMenuEntity.recordStatus = 'O' "
+			+ "ORDER BY a.tblMenuEntity.menuId")
+	List<TblMenuEntity> findMenusNotByRoleNameAndParentId(@Param("roleName") String roleName, @Param("parentMenuId") Long parentMenuId);
+	
 	
 	@Query("SELECT a FROM TblMenuEntity a "
 			+ "WHERE a.recordStatus = :recordStatus"

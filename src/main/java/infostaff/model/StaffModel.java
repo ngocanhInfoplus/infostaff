@@ -37,5 +37,9 @@ public class StaffModel{
 	private Date changedDate; 
 
 	private String recordStatus; 
+	
+	private Long managerId;
+	
+	private String email;
 
 }

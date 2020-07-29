@@ -2,13 +2,11 @@ package infostaff.service;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
@@ -34,8 +32,6 @@ public class StaffTimeCardServiceImpl implements IStaffTimeCardService {
 	@Autowired
 	TblStaffRepository staffRepo;
 
-	final String ROLE_MANAGER = "ROLE_MANGER";
-	final String ROLE_USER = "ROLE_USER";
 
 	@Override
 	public ResponseEntity<StaffTimeCardModel> checkIn(StaffTimeCardModel model, User user)
@@ -158,46 +154,35 @@ public class StaffTimeCardServiceImpl implements IStaffTimeCardService {
 	@Override
 	public List<StaffTimeCardModel> getStaffTimeCard(User user, StaffTimeCardModel model) {
 
-		if (user == null)
+		// get role
+		String roleName = CommonFunc.getRoleName(user);
+		
+		if(StringUtils.isEmpty(roleName))
 			return null;
-
-		log.info("User name: " + user.getUsername());
-
-		// get main menu
-		String roleName = StringUtils.EMPTY;
-		Iterator<GrantedAuthority> grantedAuthority = user.getAuthorities().iterator();
-
-		if (grantedAuthority.hasNext())
-			roleName = grantedAuthority.next().toString();
-		log.info("Role name: " + roleName);
 
 		List<StaffTimeCardModel> result = new ArrayList<StaffTimeCardModel>();
 		List<TblStaffTimeCardEntity> entities = null;
 		StaffTimeCardMapping mapping = new StaffTimeCardMapping();
-
-		TblStaffEntity staffEntity = staffRepo.findActivedStaff(user.getUsername(), CommonParam.RC_OPEN);
-		entities = repo.findTimeCardByStaff(staffEntity.getStaffId(), model.getFromDate(), model.getToDate(),
-				CommonParam.RC_OPEN);
 		
-//		switch (roleName) {
-//		case ROLE_USER:
-//			TblStaffEntity staffEntity = staffRepo.findActivedStaff(user.getUsername(), CommonParam.RC_OPEN);
-//			entities = repo.findTimeCardByStaff(staffEntity.getStaffId(), model.getFromDate(), model.getToDate(),
-//					CommonParam.RC_OPEN);
-//			break;
-//		case ROLE_MANAGER:
-//			if (model.getGroupId() == null)
-//				entities = repo.findTimeCardByManager(model.getFromDate(), model.getToDate(), CommonParam.RC_OPEN);
-//			else
-//				entities = repo.findTimeCardByManagerAndGroupId(model.getGroupId(), model.getFromDate(),
-//						model.getToDate(), CommonParam.RC_OPEN);
-//			break;
-//		default:
-//			//entities = repo.findTimeCardByManager(model.getFromDate(), model.getToDate(), CommonParam.RC_OPEN);
-//			entities = repo.findTimeCardByManagerAndGroupId(model.getGroupId(), model.getFromDate(),
-//					model.getToDate(), CommonParam.RC_OPEN);
-//			break;
-//		}
+		switch (roleName) {
+		case CommonParam.ROLE_USER:
+			TblStaffEntity staffEntity = staffRepo.findActivedStaff(user.getUsername(), CommonParam.RC_OPEN);
+			entities = repo.findTimeCardByStaff(staffEntity.getStaffId(), model.getFromDate(), model.getToDate(),
+					CommonParam.RC_OPEN);
+			break;
+		case CommonParam.ROLE_MANAGER:
+			if (model.getGroupId() == null)
+				entities = repo.findTimeCardByManager(model.getFromDate(), model.getToDate(), CommonParam.RC_OPEN);
+			else
+				entities = repo.findTimeCardByManagerAndGroupId(model.getGroupId(), model.getFromDate(),
+						model.getToDate(), CommonParam.RC_OPEN);
+			break;
+		default:
+			//entities = repo.findTimeCardByManager(model.getFromDate(), model.getToDate(), CommonParam.RC_OPEN);
+			entities = repo.findTimeCardByManagerAndGroupId(model.getGroupId(), model.getFromDate(),
+					model.getToDate(), CommonParam.RC_OPEN);
+			break;
+		}
 
 		if (entities.isEmpty() || entities == null)
 			return null;

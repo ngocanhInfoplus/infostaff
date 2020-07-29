@@ -15,16 +15,8 @@ public class EmailTemplateModel {
 	private String templateCode; 
 
 	private String templateContent; 
-
-	private Long defaultIdRecv01; 
-
-	private Long defaultIdRecv02; 
-
-	private Long defaultIdRecv03; 
-
-	private Long defaultIdRecv04; 
-
-	private Long defaultIdRecv05; 
+	
+	private String templateSubject;
 
 	private String createdUser; 
 

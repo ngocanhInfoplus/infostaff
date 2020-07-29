@@ -62,7 +62,10 @@ import lombok.Setter;
 	@Column(name = "record_status", length = 1) 
 	private String recordStatus; 
 	
-	@Column(name = "user_name", length = 10) 
-	private String userName; 
+	@Column(name = "manager_id") 
+	private Long managerId; 
+	
+	@Column(name = "email", length = 100) 
+	private String email; 
 
 }

@@ -18,8 +18,11 @@ public interface IMenuService {
 	MenuModel deleteMenu(User user, Long updatedId) throws ResourceNotFoundException;
 
 	List<MenuModel> getMenuByRole(User user); 
+
+	List<MenuModel> getMenuNotAssignedByRole(User user);
 	
 	List<MenuModel> getAllMenu();
 	
 	List<MenuModel> getParentMenu();
+
 }

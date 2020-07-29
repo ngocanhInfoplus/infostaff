@@ -36,4 +36,8 @@ public class MenuModel {
 	private Long groupId; 
 	
 	private List<MenuModel> subMenus;
+	
+	private List<RoleModel> roles;
+	
+	private String rolesName;
 }

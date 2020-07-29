@@ -28,7 +28,7 @@ public class MenuController {
 	@Autowired
 	IMenuService menuService;
 	
-	@GetMapping(value="/show")
+	@GetMapping(value="/get-assigned-menu")
 	public ResponseEntity<List<MenuModel>> showMenu(Principal principal){
 		
 		User user = (User) ((Authentication) principal).getPrincipal();
@@ -55,6 +55,18 @@ public class MenuController {
 	public ResponseEntity<List<MenuModel>> getAll(){
 		
 		List<MenuModel> menus = menuService.getAllMenu();
+		
+		if(menus == null || menus.isEmpty())
+			return ResponseEntity.notFound().build();
+		
+		return ResponseEntity.ok(menus);
+	}
+	
+	@GetMapping(value="/get-not-assigned-menu")
+	public ResponseEntity<List<MenuModel>> getNotAssigendMenu(Principal principal){
+		
+		User user = (User) ((Authentication) principal).getPrincipal();
+		List<MenuModel> menus = menuService.getMenuNotAssignedByRole(user);
 		
 		if(menus == null || menus.isEmpty())
 			return ResponseEntity.notFound().build();

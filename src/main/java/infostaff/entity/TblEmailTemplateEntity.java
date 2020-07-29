@@ -25,20 +25,6 @@ public class TblEmailTemplateEntity implements Serializable{
 	@Column(name = "template_content", nullable = false, length = 100) 
 	private String templateContent; 
 
-	@Column(name = "default_id_recv_01") 
-	private Long defaultIdRecv01; 
-
-	@Column(name = "default_id_recv_02") 
-	private Long defaultIdRecv02; 
-
-	@Column(name = "default_id_recv_03") 
-	private Long defaultIdRecv03; 
-
-	@Column(name = "default_id_recv_04") 
-	private Long defaultIdRecv04; 
-
-	@Column(name = "default_id_recv_05") 
-	private Long defaultIdRecv05; 
 
 	@Column(name = "created_user", length = 10) 
 	private String createdUser; 

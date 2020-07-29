@@ -7,5 +7,7 @@ import infostaff.entity.TblEmailTemplateEntity;
 
 @Repository
 public interface TblEmailTemplateRepository extends JpaRepository<TblEmailTemplateEntity, String>{
+	
+	TblEmailTemplateEntity findByTemplateCode(String templateCode);
 
 }

@@ -7,6 +7,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -31,9 +33,11 @@ public class TblStaffLeavingEntity implements Serializable{
 	@Column(name = "timeOff_Type", nullable = false, length = 10) 
 	private String timeOffType; 
 
+	@Temporal(TemporalType.DATE)
 	@Column(name = "from_date") 
 	private Date fromDate; 
 
+	@Temporal(TemporalType.DATE)
 	@Column(name = "to_Date") 
 	private Date toDate; 
 
@@ -75,5 +79,8 @@ public class TblStaffLeavingEntity implements Serializable{
 
 	@Column(name = "record_status", length = 1) 
 	private String recordStatus; 
+	
+	@Column(name = "total_hour", length = 10)
+	private int totalHour;
 
 }
