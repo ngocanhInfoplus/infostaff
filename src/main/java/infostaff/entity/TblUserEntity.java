@@ -3,17 +3,18 @@ package infostaff.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.Getter;
-import lombok.Setter; 
+import lombok.Setter;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 
 @Getter 
-@Setter 
+@Setter
+@EntityListeners(AuditingEntityListener.class)
 @Entity 
 @Table(name = "tbluser")
  public class TblUserEntity implements Serializable{ 
@@ -29,9 +30,11 @@ import lombok.Setter;
 	@Column(name = "enabled", nullable = false) 
 	private boolean enabled; 
 
+	@CreatedBy
 	@Column(name = "created_user", length = 10) 
 	private String createdUser; 
 
+	@CreatedDate
 	@Column(name = "created_date") 
 	private Date createdDate; 
 

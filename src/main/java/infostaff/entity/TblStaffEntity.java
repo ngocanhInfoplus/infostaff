@@ -3,19 +3,20 @@ package infostaff.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.Getter;
-import lombok.Setter; 
+import lombok.Setter;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 
 @Getter 
-@Setter 
+@Setter
+@EntityListeners(AuditingEntityListener.class)
 @Entity 
 @Table(name = "tblstaff")
  public class TblStaffEntity implements Serializable{ 
@@ -45,17 +46,21 @@ import lombok.Setter;
 	private String locationCode; 
 
 	@Column(name = "file_name", length = 100) 
-	private String fileName; 
+	private String fileName;
 
+	@CreatedBy
 	@Column(name = "created_user", length = 10) 
-	private String createdUser; 
+	private String createdUser;
 
+	@CreatedDate
 	@Column(name = "created_date") 
-	private Date createdDate; 
+	private Date createdDate;
 
+	@LastModifiedBy
 	@Column(name = "changed_user", length = 10) 
-	private String changedUser; 
+	private String changedUser;
 
+	@LastModifiedDate
 	@Column(name = "changed_date") 
 	private Date changedDate; 
 
@@ -63,6 +68,8 @@ import lombok.Setter;
 	private String recordStatus; 
 	
 	@Column(name = "user_name", length = 10) 
-	private String userName; 
+	private String userName;
 
+	@Column(name = "email")
+	private String email;
 }

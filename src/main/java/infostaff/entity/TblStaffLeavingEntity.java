@@ -7,9 +7,15 @@ import javax.persistence.*;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Getter 
-@Setter 
+@Setter
+@EntityListeners(AuditingEntityListener.class)
 @Entity 
 @Table(name = "tblstaffleaving")
 public class TblStaffLeavingEntity implements Serializable{ 
@@ -52,15 +58,19 @@ public class TblStaffLeavingEntity implements Serializable{
 	@Column(name = "file_name", length = 100) 
 	private String fileName; 
 
+	@CreatedBy
 	@Column(name = "created_user", length = 10) 
 	private String createdUser; 
 
+	@CreatedDate
 	@Column(name = "created_date") 
 	private Date createdDate; 
 
+	@LastModifiedBy
 	@Column(name = "changed_user", length = 10) 
 	private String changedUser; 
 
+	@LastModifiedDate
 	@Column(name = "changed_date") 
 	private Date changedDate; 
 
