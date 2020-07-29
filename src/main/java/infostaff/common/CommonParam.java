@@ -15,4 +15,5 @@ public class CommonParam {
 	public static final String ERR_MSG_VAL = "Validation error. Please check input data again!";
 	public static final String ERR_MSG_SYS = "Can not process! Contact to Admin for support";
 	public static final String ERR_MSG_PARSE = "Parsing data error. Please check input data again!";
+	public static final String ERR_MSG_NOT_FOUND_ID = "Not found for this id: ";
 }
