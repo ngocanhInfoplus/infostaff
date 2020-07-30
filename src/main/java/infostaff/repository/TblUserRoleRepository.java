@@ -2,6 +2,7 @@ package infostaff.repository;
 
 import java.util.List;
 
+import infostaff.entity.TblUserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -18,6 +19,8 @@ public interface TblUserRoleRepository extends JpaRepository<TblUserRoleEntity, 
 		
 	@Query("SELECT a.tblRoleEntity.roleName FROM TblUserRoleEntity a WHERE a.tblUserEntity.userName = :username")
 	List<String> getRoleNames(@Param("username") String username);
+
+	boolean existsByTblUserEntityAndTblRoleEntity(TblUserEntity userName, TblRoleEntity roleId);
 
 	@Transactional
 	@Modifying
