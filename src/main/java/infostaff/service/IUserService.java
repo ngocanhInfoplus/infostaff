@@ -16,5 +16,5 @@ public interface IUserService {
     UserModel updateUser(String id, UserModel model , User user) throws ResourceNotFoundException;
     UserModel deleteUser(String id, User user) throws ResourceNotFoundException;
     UserModel enableUser(String id, UserModel model, User user) throws ResourceNotFoundException;
-    UserResponse insertUserUsingMapper(UserRequest model , User user) throws ResourceNotFoundException;
+    UserResponse insertUserAndGrandMultiRoles(UserRequest model , User user) throws ResourceNotFoundException;
 }

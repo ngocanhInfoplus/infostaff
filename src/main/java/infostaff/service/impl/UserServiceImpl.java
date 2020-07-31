@@ -178,7 +178,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public UserResponse insertUserUsingMapper(UserRequest model, User user) throws ResourceNotFoundException {
+    public UserResponse insertUserAndGrandMultiRoles(UserRequest model, User user) throws ResourceNotFoundException {
 
         if (user == null)
             return null;

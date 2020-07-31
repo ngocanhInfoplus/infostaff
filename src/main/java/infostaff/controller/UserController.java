@@ -81,11 +81,11 @@ public class UserController {
 	}
 
 
-	@PostMapping(value = "/use/createUsingMapper", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/use/createAndGrandMultiRoles", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<UserResponse> createUserUsingMapper(@RequestBody UserRequest model, Principal principal)
 			throws ResourceNotFoundException {
 
 		User user = (User) ((Authentication) principal).getPrincipal();
-		return ResponseEntity.ok(userService.insertUserUsingMapper(model, user));
+		return ResponseEntity.ok(userService.insertUserAndGrandMultiRoles(model, user));
 	}
 }
