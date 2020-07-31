@@ -3,6 +3,9 @@ package infostaff.controller;
 import infostaff.exception.ResourceNotFoundException;
 import infostaff.model.RoleModel;
 import infostaff.model.UserModel;
+import infostaff.model.mapper.UserMapper;
+import infostaff.model.request.UserRequest;
+import infostaff.model.response.UserResponse;
 import infostaff.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -75,5 +78,14 @@ public class UserController {
 
 		User user = (User) ((Authentication) principal).getPrincipal();
 		return ResponseEntity.ok(userService.enableUser(id, model, user));
+	}
+
+
+	@PostMapping(value = "/use/createUsingMapper", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<UserResponse> createUserUsingMapper(@RequestBody UserRequest model, Principal principal)
+			throws ResourceNotFoundException {
+
+		User user = (User) ((Authentication) principal).getPrincipal();
+		return ResponseEntity.ok(userService.insertUserUsingMapper(model, user));
 	}
 }

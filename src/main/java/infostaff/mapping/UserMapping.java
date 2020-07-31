@@ -19,7 +19,6 @@ public class UserMapping {
             model.setEnabled(entity.isEnabled());
             model.setCreatedUser(entity.getCreatedUser());
             model.setCreatedDate(entity.getCreatedDate());
-
             return model;
         } catch (Exception ex) {
             log.error("Parsing error: " + ex.toString());

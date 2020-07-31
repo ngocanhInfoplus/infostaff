@@ -1,12 +1,16 @@
 package infostaff.entity; 
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.*;
 
+import infostaff.model.RoleModel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -36,6 +40,15 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 	@CreatedDate
 	@Column(name = "created_date") 
-	private Date createdDate; 
+	private Date createdDate;
 
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
+
+	@JoinTable(name = "tbluserrole",
+			joinColumns = @JoinColumn(name = "user_name"),
+			inverseJoinColumns = @JoinColumn(name = "role_id")
+	)
+	private Collection<TblRoleEntity> roles;
 }

@@ -3,22 +3,25 @@ package infostaff.service.impl;
 import infostaff.common.CommonParam;
 import infostaff.entity.TblRoleEntity;
 import infostaff.entity.TblUserEntity;
-import infostaff.entity.TblUserRoleEntity;
 import infostaff.exception.ResourceNotFoundException;
-import infostaff.mapping.RoleMapping;
 import infostaff.mapping.UserMapping;
-import infostaff.model.RoleModel;
 import infostaff.model.UserModel;
+import infostaff.model.mapper.UserMapper;
+import infostaff.model.request.UserRequest;
+import infostaff.model.response.UserResponse;
+import infostaff.repository.TblRoleRepository;
 import infostaff.repository.TblUserRepository;
 import infostaff.repository.TblUserRoleRepository;
 import infostaff.service.IUserService;
 import lombok.extern.slf4j.Slf4j;
+import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -31,6 +34,12 @@ public class UserServiceImpl implements IUserService {
 
     @Autowired
     TblUserRoleRepository userRolePepo;
+
+    @Autowired
+    TblRoleRepository rolePepo;
+
+    @Autowired
+    UserMapper userMap;
 
     @Override
     public List<UserModel> getAllUser(User user) {
@@ -90,12 +99,19 @@ public class UserServiceImpl implements IUserService {
             throw new ResourceNotFoundException(CommonParam.ERR_MSG_PARSE);
         if(userPepo.existsByUserName(entity.getUserName()))
             throw new ResourceNotFoundException("User is exists");
+
+        String stRolename = model.getRoleName();
+        TblRoleEntity roleEntity = rolePepo.findByRoleName(stRolename);
+        entity.setRoles(roleEntity == null ? null : Lists.newArrayList(roleEntity));
         String password = entity.getEncrytedPassword();
         entity.setEncrytedPassword(new BCryptPasswordEncoder().encode(password));
         entity.setCreatedUser(user.getUsername());
         entity.setCreatedDate(new Date());
 
         final UserModel inserted = new UserMapping().entityToModel(userPepo.save(entity));
+        if(entity.getRoles() != null)
+            inserted.setRoleName(entity.getRoles().iterator().next().getRoleName());
+
         return inserted;
     }
 
@@ -115,6 +131,10 @@ public class UserServiceImpl implements IUserService {
         entity.setCreatedDate(new Date());
 
         final UserModel updated = mapping.entityToModel(userPepo.save(entity));
+        TblRoleEntity roleEn = entity.getRoles().iterator().next();
+        if(entity.getRoles() != null)
+            updated.setRoleName(entity.getRoles().iterator().next().getRoleName());
+
         return updated;
     }
 
@@ -157,5 +177,32 @@ public class UserServiceImpl implements IUserService {
         return userEnabled;
     }
 
+    @Override
+    public UserResponse insertUserUsingMapper(UserRequest model, User user) throws ResourceNotFoundException {
+
+        if (user == null)
+            return null;
+        log.info("User name: " + user.getUsername());
+
+
+        TblUserEntity entity = userMap.requestToEntity(model);
+        if(entity == null)
+            throw new ResourceNotFoundException(CommonParam.ERR_MSG_PARSE);
+        if(userPepo.existsByUserName(entity.getUserName()))
+            throw new ResourceNotFoundException("User is exists");
+
+        Collection<TblRoleEntity> roleEntities = model.getRoles();
+        /*TblRoleEntity roleEntity = rolePepo.findByRoleName(stRolenames.get(0));
+        entity.setRoles(roleEntity == null ? null : Lists.newArrayList(roleEntity));*/
+        entity.setRoles(roleEntities);
+        String password = entity.getEncrytedPassword();
+        entity.setEncrytedPassword(new BCryptPasswordEncoder().encode(password));
+        entity.setCreatedUser(user.getUsername());
+        entity.setCreatedDate(new Date());
+
+        final UserResponse inserted = userMap.entityToResponse(userPepo.save(entity));
+
+        return inserted;
+    }
 
 }
