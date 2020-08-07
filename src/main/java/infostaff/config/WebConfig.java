@@ -11,13 +11,21 @@ public class WebConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
+//		registry.addMapping("/**")
+//				.allowedMethods("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS")
+//				.allowedOrigins("http://localhost:4200")
+//				.allowedHeaders("Authorization", "Cache-Control", "Content-Type", "Accept", "X-Requested-With",
+//						"Access-Control-Allow-Origin", "Access-Control-Allow-Headers", "Origin")
+//				.allowedHeaders("Access-Control-Expose-Headers", "Authorization", "Cache-Control", "Content-Type",
+//						"Access-Control-Allow-Origin", "Access-Control-Allow-Headers", "Origin");
+		
 		registry.addMapping("/**")
-				.allowedMethods("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS")
-				.allowedOrigins("http://localhost:4200")
-				.allowedHeaders("Authorization", "Cache-Control", "Content-Type", "Accept", "X-Requested-With",
-						"Access-Control-Allow-Origin", "Access-Control-Allow-Headers", "Origin")
-				.allowedHeaders("Access-Control-Expose-Headers", "Authorization", "Cache-Control", "Content-Type",
-						"Access-Control-Allow-Origin", "Access-Control-Allow-Headers", "Origin");
+		.allowedMethods("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS")
+		.allowedOrigins("http://35.197.156.121:80")
+		.allowedHeaders("Authorization", "Cache-Control", "Content-Type", "Accept", "X-Requested-With",
+				"Access-Control-Allow-Origin", "Access-Control-Allow-Headers", "Origin")
+		.allowedHeaders("Access-Control-Expose-Headers", "Authorization", "Cache-Control", "Content-Type",
+				"Access-Control-Allow-Origin", "Access-Control-Allow-Headers", "Origin");
 
 		//registry.addMapping("/**");
 	}
