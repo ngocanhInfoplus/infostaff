@@ -1,0 +1,63 @@
+language: java
+
+jdk:
+  - openjdk8
+
+branches:
+  only:
+    - master
+
+sudo: false
+cache:
+  directories:
+    - $HOME/.m2
+
+install:
+  - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+
+script:
+  - mvn test
+
+
+notifications:
+  email:
+    recipients:
+      - quan@infoplusvn.com
+      - tuan@infoplusvn.com
+    on_success: always # default: change
+    on_failure: always # default: always
+
+addons:
+  ssh_known_hosts: 35.197.156.121
+
+before_deploy:
+
+  - eval "$(ssh-agent -s)"
+  - chmod 600 deploy_rsa
+  - chmod 700 cibuild.sh
+  - ssh-add deploy_rsa
+
+deploy:
+  - provider: script
+    skip_cleanup: true
+    script:
+      - rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR/target/infostaff-0.0.1.jar root@35.197.156.121:/home/infostaff/java
+    on:
+      branch: master
+  - provider: script
+    skip_cleanup: true
+    script: bash ./cibuild.sh
+    on:
+      branch: master
+
+#after_success:
+#- echo $TRAVIS_BUILD_DIR
+#- pwd
+#- ls
+
+#deploy:
+#  - provider: script
+#    skip_cleanup: true
+#    script: <shell script/command that runs on deploy>
+#    on:
+#      branch: master
