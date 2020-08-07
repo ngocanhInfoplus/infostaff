@@ -21,7 +21,7 @@ public class WebConfig implements WebMvcConfigurer {
 		
 		registry.addMapping("/**")
 		.allowedMethods("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS")
-		.allowedOrigins("http://35.197.156.121:80")
+		.allowedOrigins("*")
 		.allowedHeaders("Authorization", "Cache-Control", "Content-Type", "Accept", "X-Requested-With",
 				"Access-Control-Allow-Origin", "Access-Control-Allow-Headers", "Origin")
 		.allowedHeaders("Access-Control-Expose-Headers", "Authorization", "Cache-Control", "Content-Type",
