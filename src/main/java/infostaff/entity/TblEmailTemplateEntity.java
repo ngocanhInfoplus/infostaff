@@ -22,9 +22,11 @@ public class TblEmailTemplateEntity implements Serializable{
 	@Column(name = "template_code", nullable = false, length = 10) 
 	private String templateCode; 
 
-	@Column(name = "template_content", nullable = false, length = 100) 
+	@Column(name = "template_content", nullable = false) 
 	private String templateContent; 
-
+	
+	@Column(name = "template_subject", nullable = false, length = 100) 
+	private String templateSubject; 
 
 	@Column(name = "created_user", length = 10) 
 	private String createdUser; 

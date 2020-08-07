@@ -5,7 +5,13 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -21,17 +27,30 @@ public class TblStaffLeavingEntity implements Serializable{
 	private static final long serialVersionUID = 1L; 
 
 	@Id 
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", nullable = false, length = 11) 
 	private Long id; 
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "staff_id")
+    private TblStaffEntity tblStaffEntity;
 
-	@Column(name = "staff_id", nullable = false, length = 11) 
-	private Long staffId; 
+//	@Column(name = "staff_id", nullable = false, length = 11) 
+//	private Long staffId; 
 
-	@Column(name = "leaving_type", nullable = false, length = 10) 
-	private String leavingType; 
+//	@Column(name = "leaving_type", nullable = false, length = 10) 
+//	private String leavingType; 
+	
+	@OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "leaving_type")
+    private TblLeavingTypeEntity tblLeavingTypeEntity;
 
-	@Column(name = "timeOff_Type", nullable = false, length = 10) 
-	private String timeOffType; 
+//	@Column(name = "timeOff_Type", nullable = false, length = 10) 
+//	private String timeOffType; 
+	
+	@OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "time_Off_Type")
+    private TblTimeOffEntity tblTimeOffEntity;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name = "from_date") 
@@ -55,7 +74,7 @@ public class TblStaffLeavingEntity implements Serializable{
 
 	@Column(name = "approve_status", nullable = false, length = 10) 
 	private String approveStatus; 
-
+	
 	@Column(name = "file_name", length = 100) 
 	private String fileName; 
 
@@ -80,7 +99,7 @@ public class TblStaffLeavingEntity implements Serializable{
 	@Column(name = "record_status", length = 1) 
 	private String recordStatus; 
 	
-	@Column(name = "total_hour", length = 10)
-	private int totalHour;
+	@Column(name = "total_day", length = 10)
+	private float totalDay;
 
 }

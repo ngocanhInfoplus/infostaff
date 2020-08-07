@@ -33,7 +33,7 @@ public class TblEmailStaffEntity implements Serializable {
 	private Long id;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "templage_code", nullable = false)
+    @JoinColumn(name = "email_temp_code", nullable = false)
     private TblEmailTemplateEntity tblEmailTemplateEntity;
  
     @ManyToOne(fetch = FetchType.LAZY)

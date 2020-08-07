@@ -17,4 +17,6 @@ public class StaffLeavingSearchModel {
 	
 	private Date toDate;
 	
+	private String approveStatus;
+	
 }

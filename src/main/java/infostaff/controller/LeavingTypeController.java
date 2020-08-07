@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import infostaff.model.LeavingTypeModel;
-import infostaff.service.ILeavingType;
+import infostaff.service.ILeavingTypeService;
 
 @RestController
-@RequestMapping("/api/v1.0/infostaff/leavingtype")
+@RequestMapping("/api/v1.0/infostaff/leaving-type")
 public class LeavingTypeController {
 	
 	@Autowired
-	ILeavingType leavingTypeService;
+	ILeavingTypeService leavingTypeService;
 	
 	@GetMapping(value="/get-all")
 	public ResponseEntity<List<LeavingTypeModel>> getAll(){

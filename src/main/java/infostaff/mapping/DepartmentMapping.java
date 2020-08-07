@@ -1,9 +1,12 @@
 package infostaff.mapping; 
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import infostaff.entity.TblDepartmentEntity;
 import infostaff.model.DepartmentModel;
+import infostaff.model.GroupModel;
 import lombok.extern.slf4j.Slf4j; 
 
 
@@ -14,10 +17,13 @@ public class DepartmentMapping{
 	
 		DepartmentModel model  = new DepartmentModel(); 
 		try{ 
-			model.setDeparmentId(entity.getDeparmentId()); 
-			model.setDeparmentName(entity.getDeparmentName()); 
-			model.setCreatedUser(entity.getCreatedUser()); 
-			model.setCreatedDate(entity.getCreatedDate()); 
+			
+			model.setDepartmentCode(entity.getDepartmentCode());
+			model.setDepartmentName(entity.getDepartmentName());
+			
+			GroupMapping groupMapping = new GroupMapping();
+			List<GroupModel> groupModels = groupMapping.entitiesToModels(entity.getGroups());
+			model.setGroups(groupModels);
 	
 			return model; 
 		} catch(Exception ex){ 
@@ -29,10 +35,8 @@ public class DepartmentMapping{
 	
 		TblDepartmentEntity entity  = new TblDepartmentEntity(); 
 		try{ 
-			entity.setDeparmentId(model.getDeparmentId()); 
-			entity.setDeparmentName(model.getDeparmentName()); 
-			entity.setCreatedUser(model.getCreatedUser()); 
-			entity.setCreatedDate(model.getCreatedDate()); 
+			entity.setDepartmentCode(model.getDepartmentCode());
+			entity.setDepartmentName(model.getDepartmentName());
 	
 			return entity; 
 		} catch(Exception ex){ 

@@ -4,7 +4,7 @@ import java.util.List;
 
 import infostaff.model.LeavingTypeModel;
 
-public interface ILeavingType {
+public interface ILeavingTypeService {
 	
 	List<LeavingTypeModel> getAll();
 

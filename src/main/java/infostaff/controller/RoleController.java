@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import infostaff.exception.ResourceNotFoundException;
 import infostaff.model.RoleModel;
+import infostaff.model.UserRoleModel;
 import infostaff.service.IRoleService;
 
 @Controller
@@ -58,6 +59,12 @@ public class RoleController {
 			@RequestBody RoleModel roleModel) throws ResourceNotFoundException {
 
 		return roleService.updateRole(roleId, roleModel);
+	}
+	
+	@GetMapping(value = "/get-user-role/{username}")
+	public UserRoleModel getRoleByUser(@PathVariable("username") String userName) {
+
+		return roleService.getRoleByUser(userName);
 	}
 
 //	@PostMapping(value = "/create",consumes = MediaType.APPLICATION_JSON_VALUE)

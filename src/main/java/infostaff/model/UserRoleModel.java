@@ -14,7 +14,7 @@ import lombok.ToString;
 public class UserRoleModel{ 
 	private Long id; 
 
-	private Long userId; 
+	private String userName; 
 
 	private Long roleId; 
 	

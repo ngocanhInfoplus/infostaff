@@ -22,6 +22,7 @@ import lombok.Setter;
 @Entity 
 @Table(name = "tbluserrole") 
  public class TblUserRoleEntity implements Serializable{ 
+	
 	private static final long serialVersionUID = 1L; 
 
 	@Id 
@@ -30,11 +31,11 @@ import lombok.Setter;
 	private Long id; 
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_name", nullable = false)
+    @JoinColumn(name = "user_name")
     private TblUserEntity tblUserEntity;
  
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "role_id", nullable = false)
+    @JoinColumn(name = "role_id")
     private TblRoleEntity tblRoleEntity;
 	
 	@Column(name = "created_user", length = 10)

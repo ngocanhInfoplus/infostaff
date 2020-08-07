@@ -15,9 +15,9 @@ public class StaffLeavingModel {
 
 	private Long staffId;
 
-	private String leavingType;
+	private String leavingTypeCode;
 
-	private String timeOffType;
+	private String timeOffCode;
 
 	private Date fromDate;
 
@@ -48,12 +48,26 @@ public class StaffLeavingModel {
 	private Date approvedDate;
 
 	private String recordStatus;
+	
+	private Float advanceAnualLeave;
+	
+	private String approveStatusName;
+	
+	private Float totalDay;
 
+	// for search
+	private String staffName;
+	
+	private String leavingTypeName;
+
+	private String timeOffName;
+	
+	private String managerName01;
+	
+	private String managerName02;
+	// end search
+	
 	// for sending email
 	private List<StaffModel> staffs;
-	
-	private String staffName;
-
 	// end
-
 }

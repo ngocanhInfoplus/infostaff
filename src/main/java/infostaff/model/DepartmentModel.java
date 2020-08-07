@@ -1,6 +1,6 @@
 package infostaff.model; 
 
-import java.util.Date;
+import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,12 +12,10 @@ import lombok.ToString;
 @Setter 
 @ToString 
 public class DepartmentModel{ 
-	private Long deparmentId; 
+	private String departmentCode; 
 
-	private String deparmentName; 
-
-	private String createdUser; 
-
-	private Date createdDate; 
+	private String departmentName; 
+	
+	private List<GroupModel> groups;
 
 }

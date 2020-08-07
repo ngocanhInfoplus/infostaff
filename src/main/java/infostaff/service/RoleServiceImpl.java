@@ -10,10 +10,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import infostaff.entity.TblRoleEntity;
+import infostaff.entity.TblUserRoleEntity;
 import infostaff.exception.ResourceNotFoundException;
 import infostaff.mapping.RoleMapping;
+import infostaff.mapping.UserRoleMapping;
 import infostaff.model.RoleModel;
+import infostaff.model.UserRoleModel;
 import infostaff.repository.TblRoleRepository;
+import infostaff.repository.TblUserRoleRepository;
 import infostaff.validation.RoleValidation;
 
 @Service
@@ -21,6 +25,12 @@ public class RoleServiceImpl implements IRoleService {
 
 	@Autowired
 	TblRoleRepository roleRepo;
+	
+	@Autowired
+	TblUserRoleRepository userRoleRepo;
+	
+	@Autowired
+	UserRoleMapping userRoleMapping;
 
 	@Override
 	public List<RoleModel> getAllRole() {
@@ -122,6 +132,19 @@ public class RoleServiceImpl implements IRoleService {
 		} else {
 			throw new ResourceNotFoundException("Role id is empty ");
 		}
+	}
+
+	@Override
+	public UserRoleModel getRoleByUser(String username) {
+		
+		List<TblUserRoleEntity> entities = userRoleRepo.getByUserName(username);
+
+		if (entities != null && !entities.isEmpty()) {
+
+			return userRoleMapping.entityToModel(entities.get(0));
+		}
+
+		return null;
 	}
 
 }

@@ -12,7 +12,7 @@ import infostaff.model.LeavingTypeModel;
 import infostaff.repository.TblLeavingTypeRepository;
 
 @Service
-public class LeavingTypeServiceImpl implements ILeavingType{
+public class LeavingTypeServiceImpl implements ILeavingTypeService{
 
 	@Autowired
 	TblLeavingTypeRepository leavingTypeRepo;

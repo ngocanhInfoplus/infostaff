@@ -22,5 +22,10 @@ public class CommonParam {
 	
 	public static final String TIMEOFF_HALF = "HALF";
 	public static final String TIMEOFF_FULL = "FULL";
-	public static final String TIMEOFF_OTHER = "OTHER";
+	public static final String TIMEOFF_MORE = "MORE";
+	
+	public static final String DEFAULT_DT_FORMAT = "yyyy-MM-dd hh:mm:ss";
+	public static final int DEFAULT_REST_TIME = 1;
+
 }
+

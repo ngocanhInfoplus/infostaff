@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 
 import infostaff.exception.ResourceNotFoundException;
 import infostaff.model.RoleModel;
+import infostaff.model.UserRoleModel;
 
 public interface IRoleService {
 	
@@ -14,6 +15,8 @@ public interface IRoleService {
 
 	List<RoleModel> getAllRole();
 	RoleModel getRole(Long id);
+	
+	UserRoleModel getRoleByUser(String username);
 	
 	ResponseEntity<RoleModel> insertRole(RoleModel model) throws ResourceNotFoundException;
 	ResponseEntity<RoleModel> updateRole(Long roleId, RoleModel model) throws ResourceNotFoundException;

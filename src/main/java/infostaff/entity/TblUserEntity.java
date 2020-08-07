@@ -20,7 +20,7 @@ import lombok.Setter;
 	private static final long serialVersionUID = 1L; 
 
 	@Id 
-	@Column(name = "user_name", nullable = false, length = 100) 
+	@Column(name = "user_name", nullable = false, length = 20) 
 	private String userName; 
 
 	@Column(name = "encryted_password", nullable = false, length = 128) 

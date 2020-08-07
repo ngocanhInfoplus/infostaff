@@ -1,6 +1,7 @@
 package infostaff.service;
 
 import javax.mail.MessagingException;
+import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.lang3.StringUtils;
@@ -45,10 +46,8 @@ public class EmailService implements IEmailService {
 			MimeMessage message = javaMailSender.createMimeMessage();
 
 			MimeMessageHelper helper = new MimeMessageHelper(message, true);
-			// helper.setFrom(from);
-			helper.setTo(to);
-			if (StringUtils.isNotBlank(cc))
-				helper.setCc(cc);
+			helper.setTo(InternetAddress.parse(to));
+			helper.setCc(InternetAddress.parse(cc));
 			helper.setSubject(subject);
 			helper.setText(text, true);
 

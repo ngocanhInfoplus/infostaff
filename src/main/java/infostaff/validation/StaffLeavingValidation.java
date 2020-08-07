@@ -12,13 +12,13 @@ public class StaffLeavingValidation {
 		if(model == null)
 			return false;
 		
-		if (model.getStaffId() == null)
-			return false;
+//		if (model.getStaffId() == null)
+//			return false;
 
-		if(StringUtils.isEmpty(model.getLeavingType()))
+		if(StringUtils.isEmpty(model.getLeavingTypeCode()))
 			return false;
 		
-		if(StringUtils.isEmpty(model.getTimeOffType()))
+		if(StringUtils.isEmpty(model.getTimeOffCode()))
 			return false;
 		
 		if(model.getFromDate() == null)
@@ -30,10 +30,10 @@ public class StaffLeavingValidation {
 		if(model.getManagerId01() == null)
 			return false;
 		
-		if(StringUtils.isEmpty(model.getApproveStatus()))
-			return false;
+//		if(StringUtils.isEmpty(model.getApproveStatus()))
+//			return false;
 		
-		if(CommonParam.TIMEOFF_OTHER.equals(model.getTimeOffType())) {
+		if(CommonParam.TIMEOFF_MORE.equals(model.getTimeOffCode())) {
 			if(model.getFromDate() == null || model.getToDate() == null)
 				return false;
 		
