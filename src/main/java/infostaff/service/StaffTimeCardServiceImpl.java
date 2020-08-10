@@ -1,5 +1,6 @@
 package infostaff.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,6 +32,8 @@ public class StaffTimeCardServiceImpl implements IStaffTimeCardService {
 
 	@Autowired
 	TblStaffRepository staffRepo;
+	
+	final String timeFormat = "HH:mm:ss";
 
 
 	@Override
@@ -48,8 +51,8 @@ public class StaffTimeCardServiceImpl implements IStaffTimeCardService {
 
 				if (entity != null) {
 
-					// setup check in case
-					entity.setCheckIn(CommonFunc.dateToString(new Date(), "hh:mm:ss"));
+					// setup check in case				
+					entity.setCheckIn(CommonFunc.dateToString(LocalDateTime.now(),timeFormat));
 					entity.setChecked(true);
 					entity.setWorkingDate(new Date());
 					entity.setCreatedUser(user.getUsername());
@@ -82,7 +85,7 @@ public class StaffTimeCardServiceImpl implements IStaffTimeCardService {
 					.orElseThrow(() -> new ResourceNotFoundException("StaffTimeCard not found for this id :: " + id));
 
 			// setup check out case
-			entity.setCheckOut(CommonFunc.dateToString(new Date(), "hh:mm:ss"));
+			entity.setCheckOut(CommonFunc.dateToString(new Date(), timeFormat));
 
 			final StaffTimeCardModel updatededModel = mapping.entityToModel(repo.save(entity));
 			return ResponseEntity.ok(updatededModel);

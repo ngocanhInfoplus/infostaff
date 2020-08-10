@@ -2,6 +2,8 @@ package infostaff.common;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -42,6 +44,14 @@ public class CommonFunc {
 			return StringUtils.EMPTY;
 
 		return new SimpleDateFormat(format).format(date);
+	}
+	
+	public static String dateToString(LocalDateTime date, String format) {
+		if (date == null)
+			return StringUtils.EMPTY;
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);  
+		return  date.format(formatter);   
 	}
 
 	public static String getRoleName(User user) {
