@@ -58,7 +58,7 @@ public class StaffTimeCardServiceImpl implements IStaffTimeCardService {
 					entity.setCreatedUser(user.getUsername());
 					entity.setCreatedDate(new Date());
 					entity.setRecordStatus(CommonParam.RC_OPEN);
-
+ 
 					final StaffTimeCardModel insertedModel = mapping.entityToModel(repo.save(entity));
 					return ResponseEntity.ok(insertedModel);
 
