@@ -28,7 +28,7 @@ notifications:
     on_failure: always # default: always
 
 addons:
-  ssh_known_hosts: 35.197.156.121
+  ssh_known_hosts: 104.199.242.108
 
 before_deploy:
 
@@ -41,7 +41,7 @@ deploy:
   - provider: script
     skip_cleanup: true
     script:
-      - rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR/target/infostaff-0.0.1.jar root@35.197.156.121:/home/infostaff/java
+      - rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR/target/infostaff-0.0.1.jar root@104.199.242.108:/home/infostaff/java
     on:
       branch: master
   - provider: script
