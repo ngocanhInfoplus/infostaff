@@ -35,7 +35,7 @@ addons:
 
 before_deploy:
 
-#  - eval "$(ssh-agent -s)"
+  - eval "$(ssh-agent -s)"
 #  - chmod 600 deploy_rsa
   - chmod 700 cibuild.sh
 #  - ssh-add deploy_rsa
