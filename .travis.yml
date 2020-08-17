@@ -35,8 +35,8 @@ addons:
 
 before_deploy:
 
-  - eval "$(ssh-agent -s)"
-  - chmod 600 deploy_rsa
+#  - eval "$(ssh-agent -s)"
+#  - chmod 600 deploy_rsa
   - chmod 700 cibuild.sh
   - ssh-add deploy_rsa
 
@@ -49,7 +49,7 @@ deploy:
       branch: master
   - provider: script
     skip_cleanup: true
-    script: sshpass -p "lilama1996" ssh root@104.199.242.108 < cibuild.sh
+    script: sshpass -p "lilama1996" ssh root@104.199.242.108 'bash -s' < cibuild.sh
     on:
       branch: master
 
